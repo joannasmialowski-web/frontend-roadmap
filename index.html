@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Dev Roadmap — Angular Mid/Senior</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <style>
+        :root{
+            --bg:#0f0f11;--bg2:#161619;--bg3:#1e1e22;
+            --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+            --text:#e8e6e0;--text2:#9a9890;--text3:#5a5856;
+            --accent:#c8f060;--accent2:#60d0f0;
+            --warn:#f0a040;--danger:#f06060;--success:#60d090;
+            --radius:10px;--radius-lg:14px;
+            --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:14px;line-height:1.5}
+
+        .sync-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 1.5rem;display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text2);font-family:var(--mono);flex-wrap:wrap}
+        .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:background .3s}
+        .sync-dot.synced{background:var(--success)}.sync-dot.syncing{background:var(--warn);animation:pulse 1s infinite}.sync-dot.error{background:var(--danger)}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+        .sync-user{margin-left:auto;display:flex;align-items:center;gap:8px}
+        .sync-input{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:3px 8px;color:var(--text);font-family:var(--mono);font-size:11px;width:140px;outline:none}
+        .sync-input:focus{border-color:var(--border2)}
+        .sync-btn{font-size:11px;padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--text2);font-family:var(--font);transition:all .12s}
+        .sync-btn:hover{background:var(--bg3);color:var(--text)}
+        .sync-btn.ok{background:rgba(96,208,144,.15);color:var(--success);border-color:rgba(96,208,144,.3)}
+
+        .header{padding:1.5rem 1.5rem 0;max-width:860px;margin:0 auto}
+        .header-top{display:flex;align-items:center;gap:12px;margin-bottom:.3rem}
+        .logo{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#0f0f11;font-weight:600;font-size:14px;flex-shrink:0}
+        h1{font-size:1.1rem;font-weight:600}
+        .subtitle{font-size:12px;color:var(--text2);margin-bottom:1.25rem}
+
+        .tabs{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;max-width:860px;margin:0 auto 1.25rem;background:var(--bg2)}
+        .tab{flex:1;padding:10px 8px;font-size:12px;font-weight:500;cursor:pointer;background:none;border:none;color:var(--text2);transition:all .15s;font-family:var(--font)}
+        .tab.active{background:var(--bg3);color:var(--text)}
+        .tab:not(:last-child){border-right:1px solid var(--border)}
+        .tab:hover:not(.active){color:var(--text);background:rgba(255,255,255,.03)}
+
+        .main{max-width:860px;margin:0 auto;padding:0 1.5rem 3rem}
+        .view{display:none}.view.active{display:block}
+
+        .stats{display:flex;gap:8px;margin-bottom:1rem}
+        .stat{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;text-align:center}
+        .stat-num{font-size:20px;font-weight:600;color:var(--accent)}
+        .stat-lbl{font-size:10px;color:var(--text2);margin-top:2px;font-family:var(--mono)}
+
+        .toolbar{display:flex;justify-content:flex-end;margin-bottom:10px}
+        .reset-btn{font-size:11px;padding:4px 12px;border-radius:var(--radius);border:1px solid var(--border);background:none;cursor:pointer;color:var(--text2);font-family:var(--font);transition:all .12s}
+        .reset-btn:hover{background:var(--bg2);color:var(--text);border-color:var(--border2)}
+
+        .block{margin-bottom:.75rem;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--bg2);overflow:hidden;transition:border-color .15s}
+        .block:hover{border-color:var(--border2)}
+        .bh{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;user-select:none;transition:background .12s}
+        .bh:hover{background:rgba(255,255,255,.03)}
+        .bbadge{font-size:9px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;font-family:var(--mono);letter-spacing:.04em}
+        .btitle{font-size:13px;font-weight:500;flex:1}
+        .bmeta{font-size:10px;color:var(--text2);font-family:var(--mono)}
+        .chev{font-size:12px;color:var(--text3);transition:transform .2s}
+        .block.open .chev{transform:rotate(180deg)}
+        .prog-wrap{height:2px;background:var(--border);margin:0 16px}
+        .prog-bar{height:100%;border-radius:1px;transition:width .3s}
+        .bbody{display:none;padding:14px 16px}
+        .block.open .bbody{display:block}
+
+        .sec-lbl{font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--text3);border-bottom:1px solid var(--border);padding-bottom:5px;margin:14px 0 8px;text-transform:uppercase;font-family:var(--mono)}
+        .sec-lbl:first-child{margin-top:0}
+
+        .concept{margin-bottom:6px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .12s}
+        .concept:hover{border-color:var(--border2)}
+        .concept.cdone{border-color:rgba(96,208,144,.3);background:rgba(96,208,144,.04)}
+        .concept.cdone .cname{text-decoration:line-through;color:var(--text2)}
+        .ch{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;transition:background .12s}
+        .ch:hover{background:rgba(255,255,255,.03)}
+        .ctag{font-size:8px;font-weight:600;padding:2px 7px;border-radius:10px;flex-shrink:0;font-family:var(--mono)}
+        .tag-theory{background:rgba(200,240,96,.12);color:#c8f060}
+        .tag-code{background:rgba(96,208,240,.12);color:#60d0f0}
+        .tag-interview{background:rgba(240,160,64,.12);color:#f0a040}
+        .cname{font-size:12px;font-weight:500;flex:1}
+        .cchev{font-size:11px;color:var(--text3);transition:transform .2s}
+        .concept.copen .cchev{transform:rotate(180deg)}
+        .cbody{display:none;padding:12px 14px;border-top:1px solid var(--border);background:var(--bg)}
+        .concept.copen .cbody{display:block}
+        .explain-block{margin-bottom:10px}
+        .explain-lbl{font-size:9px;font-weight:600;letter-spacing:.07em;color:var(--text3);margin-bottom:4px;font-family:var(--mono);text-transform:uppercase}
+        .explain-text{font-size:11px;color:var(--text2);line-height:1.6}
+        .done-btn{margin-top:10px;font-size:11px;padding:5px 14px;border-radius:var(--radius);border:1px solid var(--border2);background:none;cursor:pointer;color:var(--text2);font-family:var(--font);transition:all .12s}
+        .done-btn:hover{background:var(--bg2);color:var(--text)}
+        .concept.cdone .done-btn{background:rgba(96,208,144,.12);color:var(--success);border-color:rgba(96,208,144,.3)}
+
+        .task{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:var(--radius);cursor:pointer;border:1px solid var(--border);margin-bottom:6px;transition:all .12s;background:var(--bg)}
+        .task:hover{background:var(--bg2);border-color:var(--border2)}
+        .task.tdone{background:rgba(96,208,144,.04);border-color:rgba(96,208,144,.2)}
+        .tchk{width:16px;height:16px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px}
+        .task.tdone .tchk{background:rgba(96,208,144,.2);border-color:rgba(96,208,144,.5);color:var(--success)}
+        .ttxt{font-size:12px;font-weight:500;line-height:1.4;font-family:var(--mono)}
+        .task.tdone .ttxt{text-decoration:line-through;color:var(--text2)}
+        .thint{font-size:10px;color:var(--text2);margin-top:3px;line-height:1.4}
+        .tlink{font-size:10px;color:var(--accent2);margin-top:2px}
+
+        .qcat{font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--text3);margin:16px 0 8px;text-transform:uppercase;font-family:var(--mono)}
+        .qcat:first-child{margin-top:0}
+        .qcard{margin-bottom:6px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--bg2)}
+        .qcard:hover{border-color:var(--border2)}
+        .qh{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;transition:background .12s}
+        .qh:hover{background:rgba(255,255,255,.03)}
+        .qlvl{font-size:8px;font-weight:600;padding:2px 7px;border-radius:10px;flex-shrink:0;font-family:var(--mono)}
+        .lvl-j{background:rgba(96,208,144,.15);color:#60d090}
+        .lvl-m{background:rgba(240,160,64,.15);color:#f0a040}
+        .lvl-s{background:rgba(240,96,96,.15);color:#f06060}
+        .qtxt{font-size:12px;font-weight:500;flex:1}
+        .qchev{font-size:11px;color:var(--text3);transition:transform .2s}
+        .qcard.qopen .qchev{transform:rotate(180deg)}
+        .qbody{display:none;padding:12px 14px;border-top:1px solid var(--border);font-size:11px;color:var(--text2);line-height:1.6;background:var(--bg)}
+        .qcard.qopen .qbody{display:block}
+
+        .skill-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-bottom:4px}
+        .skill-item{border:1px solid var(--border);border-radius:var(--radius);padding:9px 11px;cursor:pointer;transition:all .12s;background:var(--bg)}
+        .skill-item:hover{background:var(--bg2);border-color:var(--border2)}
+        .skill-item.done{background:rgba(96,208,144,.04);border-color:rgba(96,208,144,.2)}
+        .skill-item.done .sname{text-decoration:line-through;color:var(--text2)}
+        .stag{font-size:8px;font-weight:600;padding:1px 6px;border-radius:10px;display:inline-block;margin-bottom:4px;font-family:var(--mono)}
+        .tag-must{background:rgba(240,96,96,.15);color:#f06060}
+        .tag-mid{background:rgba(240,160,64,.15);color:#f0a040}
+        .tag-nice{background:rgba(255,255,255,.08);color:var(--text2)}
+        .sname{font-size:11px;font-weight:500;margin-bottom:2px;line-height:1.3}
+        .sdesc{font-size:10px;color:var(--text2);line-height:1.3}
+
+        .filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+        .fbtn{font-size:10px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--text2);font-family:var(--font);transition:all .12s}
+        .fbtn:hover{color:var(--text);border-color:var(--border2)}
+        .fbtn.active{background:rgba(96,208,240,.12);color:var(--accent2);border-color:rgba(96,208,240,.3)}
+
+        .footer{text-align:center;padding:2rem;font-size:11px;color:var(--text3);border-top:1px solid var(--border);font-family:var(--mono)}
+
+        @media(max-width:600px){
+            .header,.main{padding-left:1rem;padding-right:1rem}
+            .tabs{margin-left:1rem;margin-right:1rem}
+            .stats{flex-wrap:wrap}.stat{min-width:calc(50% - 4px)}
+        }
+    </style>
+</head>
+<body>
+
+<div class="sync-bar">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-status">Connecting...</span>
+    <div class="sync-user">
+        <span style="color:var(--text3)">view as:</span>
+        <input class="sync-input" id="user-input" placeholder="your nick (e.g. joanna)">
+        <button class="sync-btn" id="user-btn" onclick="setUser()">Save</button>
+    </div>
+</div>
+
+<div class="header">
+    <div class="header-top">
+        <div class="logo">FE</div>
+        <div><h1>Frontend Dev Roadmap</h1></div>
+    </div>
+    <p class="subtitle">Angular Mid/Senior · Learning plan + Auth app project + Interview Q&amp;A</p>
+</div>
+
+<div class="tabs">
+    <button class="tab active" onclick="showTab('learn')">📚 Learning</button>
+    <button class="tab" onclick="showTab('project')">🛠 Project</button>
+    <button class="tab" onclick="showTab('interview')">🎤 Interview</button>
+    <button class="tab" onclick="showTab('skills')">✅ Skills</button>
+</div>
+
+<div class="main">
+    <div class="view active" id="tab-learn">
+        <div class="stats">
+            <div class="stat"><div class="stat-num" id="ld">0</div><div class="stat-lbl">completed</div></div>
+            <div class="stat"><div class="stat-num" id="lt">0</div><div class="stat-lbl">total</div></div>
+            <div class="stat"><div class="stat-num" id="lp">0%</div><div class="stat-lbl">progress</div></div>
+        </div>
+        <div class="toolbar"><button class="reset-btn" onclick="resetLearn()">↺ reset</button></div>
+        <div id="sprints-root"></div>
+    </div>
+    <div class="view" id="tab-project">
+        <div class="stats">
+            <div class="stat"><div class="stat-num" id="pd">0</div><div class="stat-lbl">done</div></div>
+            <div class="stat"><div class="stat-num" id="pt">0</div><div class="stat-lbl">total</div></div>
+            <div class="stat"><div class="stat-num" id="pp">0%</div><div class="stat-lbl">progress</div></div>
+        </div>
+        <div class="toolbar"><button class="reset-btn" onclick="resetProject()">↺ reset</button></div>
+        <div id="features-root"></div>
+    </div>
+    <div class="view" id="tab-interview"><div id="questions-root"></div></div>
+    <div class="view" id="tab-skills">
+        <div class="stats">
+            <div class="stat"><div class="stat-num" id="skd">0</div><div class="stat-lbl">completed</div></div>
+            <div class="stat"><div class="stat-num" id="skt">0</div><div class="stat-lbl">total</div></div>
+            <div class="stat"><div class="stat-num" id="skp">0%</div><div class="stat-lbl">progress</div></div>
+        </div>
+        <div class="filter-row" id="skill-filters"></div>
+        <div class="toolbar"><button class="reset-btn" onclick="resetSkills()">↺ reset</button></div>
+        <div id="skills-root"></div>
+    </div>
+</div>
+
+<div class="footer">frontend-roadmap · Firebase Realtime Database · progress saved automatically</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
+
+    const FB = { apiKey:"AIzaSyAah37NC3Q-x2P1g2byWCkbk69f9-RrL68", authDomain:"frontend-roadmap-28de8.firebaseapp.com", databaseURL:"https://frontend-roadmap-28de8-default-rtdb.europe-west1.firebasedatabase.app", projectId:"frontend-roadmap-28de8", storageBucket:"frontend-roadmap-28de8.firebasestorage.app", messagingSenderId:"1025217815949", appId:"1:1025217815949:web:334974386ea072752309c4" };
+    const db = getDatabase(initializeApp(FB));
+
+    let user = localStorage.getItem('roadmap-user') || 'joanna';
+    let S = {}, dbRef = null, saveT = null;
+    const dot = document.getElementById('sync-dot');
+    const statusEl = document.getElementById('sync-status');
+    const userInput = document.getElementById('user-input');
+    userInput.value = user;
+
+    function setDot(cls, msg){ dot.className='sync-dot '+cls; statusEl.textContent=msg; }
+
+    function connect(name){
+        user = name.trim().toLowerCase().replace(/[^a-z0-9_-]/g,'')||'joanna';
+        localStorage.setItem('roadmap-user', user);
+        userInput.value = user;
+        const btn = document.getElementById('user-btn');
+        btn.classList.add('ok'); btn.textContent='✓ '+user;
+        setTimeout(()=>{ btn.classList.remove('ok'); btn.textContent='Save'; }, 2000);
+        setDot('syncing','Connecting as '+user+'...');
+        dbRef = ref(db,'users/'+user+'/progress');
+        onValue(dbRef, snap=>{ S=snap.val()||{}; rebuildUI(); setDot('synced','Synced · '+user); }, err=>setDot('error','Error: '+err.message));
+    }
+
+    function save(){
+        setDot('syncing','Saving...'); clearTimeout(saveT);
+        saveT = setTimeout(()=>{ if(!dbRef)return; set(dbRef,S).then(()=>setDot('synced','Saved · '+user)).catch(()=>setDot('error','Save failed')); }, 700);
+    }
+
+    window.setUser = ()=>{ const v=userInput.value.trim(); if(v) connect(v); };
+    userInput.addEventListener('keydown', e=>{ if(e.key==='Enter') window.setUser(); });
+
+    // ── DATA ─────────────────────────────────────────────────────────────────────
+
+    const SPRINTS=[
+        {id:'sp1',title:'JS Fundamentals for interviews',time:'Week 1–2',color:'#f0a040',bg:'rgba(240,160,64,.15)',tc:'#f0a040',sections:[
+                {l:'OOP & Prototypes',concepts:[
+                        {id:'c1',tag:'theory',name:'The new keyword — what it actually does',why:'Classic question: "what happens when you call new?"',explain:'1) Creates empty {}. 2) Sets __proto__ to Fn.prototype. 3) Calls Fn with this = that object. 4) Returns the object — unless Fn returns another object. Without new in strict mode: this = undefined.',task:'Implement myNew(Fn, ...args) that behaves identically to new.'},
+                        {id:'c2',tag:'theory',name:'prototype vs __proto__',why:'Asked at every level — junior through senior',explain:'prototype: property on functions — becomes the __proto__ of instances. __proto__: link from instance to its prototype. Chain: instance → Class.prototype → Object.prototype → null.',task:'Log the full prototype chain: class Animal{}; class Dog extends Animal{}; const d = new Dog().'},
+                        {id:'c3',tag:'code',name:'ES6 class — under the hood',why:'"Are classes real classes?" — common senior question',explain:'class is syntax sugar over function constructor + prototype. typeof class Foo{} === "function". Differences: cannot call without new, always strict, methods non-enumerable, no hoisting.',task:'Rewrite an ES6 class with extends using plain prototype — no class keyword.'},
+                        {id:'c4',tag:'theory',name:'Closures & lexical environment',why:'Asked on every JS interview without exception',explain:'Closure = function + persistent reference to its lexical environment at definition time. Env Record (variables) + outer reference (parent scope). Lookup: local → outer → global → ReferenceError.',task:'Write makeCounter() returning {inc, dec, get} with private state unreachable from outside.'},
+                        {id:'c5',tag:'interview',name:'this — 4 rules + arrow functions',why:'Most common JS question at mid/senior level',explain:'1) Method: this = object before dot. 2) Function strict: undefined. 3) Function non-strict: global. 4) Arrow: lexical this from enclosing scope, no own this. 5) new: this = new object. call/apply/bind override rules 1–2.',task:'What does this print: const obj={name:"X",f:()=>console.log(this?.name)}; obj.f() — and why?'},
+                    ]},
+                {l:'Functional Patterns',concepts:[
+                        {id:'c6',tag:'theory',name:'Currying & partial application',why:'FP foundation — asked at mid/senior level',explain:'Currying: f(a,b,c) → f(a)(b)(c). Partial: bind(null,arg1) fixes N args at once. Difference: curry always produces unary functions; partial fixes any number. Used in compose/pipe.',task:'Write curry(fn) that works for any function length. Verify: curry(add)(1)(2) === 3.'},
+                        {id:'c7',tag:'code',name:'Memoization + the object argument problem',why:'Performance — discussed in every optimization conversation',explain:'Cache results via closure. Problem: objects compared by reference. JSON.stringify as key — pitfalls: undefined, Date, circular refs, key order. Fix: sort keys before stringify, or WeakMap.',task:'Write memoize(fn) that handles {a:1,b:2} vs {b:2,a:1} as equivalent (sorted keys).'},
+                        {id:'c8',tag:'theory',name:'Recursion — risks, benefits, alternatives',why:'Algorithms, DOM trees, deep clone operations',explain:'Risk: stack overflow (~10–15k calls). Use for: trees, graphs, divide & conquer. Trampolining: return a thunk instead of calling recursively — outer loop executes thunks without growing the stack.',task:'Write deepClone(obj) recursively. Then iteratively with explicit stack. Compare.'},
+                    ]},
+            ]},
+        {id:'sp2',title:'TypeScript — mid/senior level',time:'Week 3–4',color:'#a080f0',bg:'rgba(160,128,240,.15)',tc:'#a080f0',sections:[
+                {l:'Advanced Types',concepts:[
+                        {id:'c9',tag:'theory',name:'Generics — constraints & infer',why:'Every mid+ TS interview asks about generics in practice',explain:'Constraints: <T extends object>. infer extracts a type inside conditional: ReturnType<T> = T extends (...args:any)=>infer R ? R : never. Used in UnwrapPromise, ExtractArrayElement, etc.',task:'Write UnwrapPromise<T> that extracts the resolved type from Promise<T>.'},
+                        {id:'c10',tag:'code',name:'Discriminating Unions + exhaustive check',why:'Type architecture — very common at mid/senior interviews',explain:'Literal type as discriminant. TS narrows via switch. Exhaustive check: assign to never in default — TS errors if any variant is unhandled.',task:'Write getArea(shape: Shape) with exhaustive check. Add a new shape and observe the TS error.'},
+                        {id:'c11',tag:'theory',name:'satisfies vs as — when to use each',why:'Senior question since TypeScript 4.9',explain:'as: forced cast, hides errors (unsafe). satisfies: validates conformance BUT keeps the narrower inferred type. {red:"#ff0000"} satisfies Record<string,string> — red stays literal, not string.',task:'Show a case where as hides an error that satisfies would catch.'},
+                        {id:'c12',tag:'code',name:'Mapped types & conditional types',why:'Senior level — writing your own utility types',explain:'Mapped: {[K in keyof T]: ...}. Conditional: T extends U ? X : Y. Together they build Partial, Required, Pick, Readonly under the hood.',task:'Write DeepPartial<T> that recursively makes all nested properties optional.'},
+                    ]},
+                {l:'Classes & Decorators',concepts:[
+                        {id:'c13',tag:'theory',name:'abstract class vs interface — when to use each',why:'Classic OOP question, especially for Angular DI',explain:'Interface: contract only, erased at compile time, no JS output. Abstract class: can have implementation, generates JS, usable as DI token. In Angular: use abstract class as token (interface disappears at runtime).',task:'Create abstract class Repository<T> with abstract methods and a default cache implementation.'},
+                        {id:'c14',tag:'code',name:'Decorators — evaluation vs execution order',why:'Angular is built on decorators — fundamental understanding required',explain:'Evaluation (reading expressions): top to bottom. Execution (runtime calls): bottom to top. @A @B class: A read → B read → B(class) called → A(result) called. Analogy: compose(A,B)(class) = A(B(class)).',task:'Write a @Log decorator that logs every method call with its arguments and return value.'},
+                    ]},
+            ]},
+        {id:'sp3',title:'Angular core — systematization',time:'Week 5–7',color:'#f06060',bg:'rgba(240,96,96,.15)',tc:'#f06060',sections:[
+                {l:'Change Detection',concepts:[
+                        {id:'c15',tag:'theory',name:'The CD algorithm — how it works',why:'Asked on every Angular mid+ interview',explain:'Angular walks the component tree from root. Default: checks every component on every async event. OnPush: only checks when an @Input reference changes (mutation is NOT enough!), an event fires, markForCheck() is called, or async pipe emits.',task:'Create a component with OnPush. Prove with ngDoCheck logs that it does NOT re-render on object mutation.'},
+                        {id:'c16',tag:'code',name:'Signals — Angular 17+ reactivity model',why:'The future of Angular — increasingly common in interviews',explain:'signal(val): reactive primitive. computed(): lazy, cached, recalculates only when a dependency changes. effect(): side effects reacting to signal changes. input() replaces @Input. Replaces BehaviorSubject+async in modern code.',task:'Rewrite a component from BehaviorSubject+async pipe to signal()+computed(). Compare boilerplate.'},
+                        {id:'c17',tag:'interview',name:'ExpressionChangedAfterChecked — cause & fix',why:'Senior interviews — very few candidates understand this',explain:'Dev mode: Angular runs a 2nd CD pass after the first. If a binding value changed between passes → error. Causes: mutating state in ngAfterViewInit, child modifying parent data. Fixes: setTimeout, Promise.resolve().then(), or redesign to unidirectional flow.',task:'Deliberately trigger this error. Fix it three different ways and explain each.'},
+                    ]},
+                {l:'Dependency Injection',concepts:[
+                        {id:'c18',tag:'theory',name:'Injector tree — hierarchy & singletons',why:'Senior question — few developers understand this deeply',explain:'Root (providedIn:"root"): singleton for whole app. Lazy module injector: new instance per lazy module. Element injector (component providers:[]): new instance per component. @SkipSelf: skip current injector. @Optional: return null instead of throwing.',task:'Prove component providers create a new instance. Add console.log to the service constructor.'},
+                        {id:'c19',tag:'code',name:'InjectionToken + useFactory',why:'Injecting config and non-class values — standard in real apps',explain:'InjectionToken<T>: unique typed token. useFactory: ()=>value, can use inject() inside (Angular 14+). Common uses: environment config, feature flags, window object, runtime variables.',task:'Create an APP_CONFIG token with an ApiConfig interface. Inject it via inject() in a service.'},
+                    ]},
+                {l:'RxJS in Angular',concepts:[
+                        {id:'c20',tag:'interview',name:'switchMap vs mergeMap vs concatMap vs exhaustMap',why:'The most common RxJS question — asked at every Angular interview',explain:'switchMap: cancels previous, subscribes to new — search/autocomplete. mergeMap: all in parallel — multiple uploads. concatMap: FIFO queue — when order matters. exhaustMap: ignores new while previous runs — prevents double-submit.',task:'Button → HTTP request. Click 5 times fast. Show the different behaviors of each operator.'},
+                        {id:'c21',tag:'code',name:'takeUntilDestroyed — modern unsubscribe pattern',why:'Angular 16+ — replaces the old Subject destroy pattern',explain:'Uses inject(DestroyRef).onDestroy() under the hood. Usage: source$.pipe(takeUntilDestroyed()). Old pattern: private destroy$ = new Subject() + takeUntil(this.destroy$) + ngOnDestroy.',task:'Show old Subject pattern vs new takeUntilDestroyed in the same component. Explain the difference.'},
+                        {id:'c22',tag:'code',name:'shareReplay — memory leak & fix',why:'Common bug in Angular apps — asked in code reviews',explain:'shareReplay(1) = refCount:FALSE by default → never unsubscribes → memory leak. Fix: shareReplay({bufferSize:1, refCount:true}). ALWAYS use {refCount:true}.',task:'Prove the memory leak with shareReplay(1). Fix it. Verify in Chrome DevTools Memory tab.'},
+                    ]},
+            ]},
+        {id:'sp4',title:'Auth, Security & Browser APIs',time:'Week 8–9',color:'#f060a0',bg:'rgba(240,96,160,.15)',tc:'#f060a0',sections:[
+                {l:'JWT & Auth Flow',concepts:[
+                        {id:'c23',tag:'theory',name:'JWT — structure, storage & security',why:'Core knowledge for the project and every auth interview',explain:'Header.Payload.Signature (base64url — not encryption!). localStorage: XSS vulnerable. HttpOnly cookie: JS cannot read it, XSS-resistant, CSRF-vulnerable (mitigated by SameSite=Strict + CSRF token). The right choice depends on your threat model.',task:'Decode a JWT in the console without any library (atob). Explain why the client cannot "verify" the signature.'},
+                        {id:'c24',tag:'code',name:'Refresh token flow with request queuing',why:'Practical mid/senior question — you must be able to implement this',explain:'401 → interceptor catches → call refresh → update token → retry original. Problem: multiple parallel 401s. Fix: BehaviorSubject(false) as isRefreshing lock + filter(v=>v!==null) + take(1) queues requests.',task:'Write an interceptor that queues parallel requests during token refresh and retries them on success.'},
+                        {id:'c25',tag:'theory',name:'OAuth 2.0 + PKCE for SPAs',why:'Enterprise apps — increasingly asked at mid/senior level',explain:'SPAs cannot have client_secret. PKCE: code_verifier (random) → SHA256 = challenge → send challenge → get code → exchange code + verifier for token. Intercepting the code is useless without the verifier.',task:'Draw the full OAuth 2.0 + PKCE flow on paper. Explain each step in your own words.'},
+                    ]},
+                {l:'Security',concepts:[
+                        {id:'c26',tag:'interview',name:'XSS — types and Angular protection',why:'Security fundamentals — mandatory for senior developers',explain:'Reflected (URL), Stored (DB), DOM-based (innerHTML/eval). Angular sanitizes {{ }}, [property], [attr.]. Dangerous: bypassSecurityTrust*, [innerHTML] with unsanitized data. Extra layer: Content Security Policy.',task:'Deliberately trigger XSS via innerHTML in vanilla JS. Verify how Angular blocks the same attack.'},
+                        {id:'c27',tag:'theory',name:'CSRF — protection & SameSite cookies',why:'Relevant whenever JWT is stored in cookies',explain:'CSRF: malicious site sends request on behalf of logged-in user. Protection: SameSite=Strict/Lax, CSRF token in header, Origin/Referer validation. Angular HttpClient has no built-in CSRF protection.',task:'Explain: why is JWT in localStorage immune to CSRF but vulnerable to XSS? Draw the threat model.'},
+                        {id:'c28',tag:'theory',name:'Browser storage — comparison',why:'Classic question at every level',explain:'localStorage: 5MB, persists, sync, XSS vulnerable. sessionStorage: tab-scoped. HttpOnly cookie: sent with every request, JS-inaccessible, SameSite protects CSRF. IndexedDB: large async data, offline.',task:'Create a comparison table: localStorage vs sessionStorage vs cookie vs IndexedDB.'},
+                    ]},
+            ]},
+        {id:'sp5',title:'Testing & Accessibility',time:'Week 10–12',color:'#60d090',bg:'rgba(96,208,144,.15)',tc:'#60d090',sections:[
+                {l:'Angular Testing',concepts:[
+                        {id:'c29',tag:'code',name:'TestBed — configuration & pitfalls',why:'Every Angular interview asks about testing — many candidates fail here',explain:'TestBed.configureTestingModule: declarations, imports, providers. fixture.detectChanges() must be called manually. static:true in @ViewChild when needed in ngOnInit. NO_ERRORS_SCHEMA isolates but hides child errors.',task:'Write a test that: renders a @Input list, filters via input field, shows empty state.'},
+                        {id:'c30',tag:'code',name:'fakeAsync + tick vs async/await',why:'Async tests — the most common problem',explain:'fakeAsync: control time synchronously via tick(ms) — required for setTimeout/debounceTime. async + whenStable(): waits for microtasks. fakeAsync does not work with real HTTP (use HttpTestingModule).',task:'Test a component with debounceTime(300) on an input. Use fakeAsync + tick(300).'},
+                        {id:'c31',tag:'code',name:'Mocking: SpyObj vs HttpTestingController',why:'Test isolation — the foundation of good unit testing',explain:'createSpyObj: mocks entire service. spyOn: mocks single method. HttpTestingController: intercepts HTTP without real server — expectOne(url).flush(data). Always call controller.verify() at end.',task:'Write tests for AuthService: mock HTTP, verify token is stored after login and cleared after logout.'},
+                    ]},
+                {l:'Accessibility (a11y)',concepts:[
+                        {id:'c32',tag:'theory',name:'ARIA roles — when to use, when not to',why:'Increasingly required in job listings, especially enterprise and Western companies',explain:'Semantic HTML always comes first. ARIA only when HTML is not enough. <div role="button"> is an anti-pattern. Use ARIA for custom widgets, aria-live for dynamic updates, aria-describedby for errors.',task:'Run Lighthouse → Accessibility. Fix the top 3 issues. Document what you changed.'},
+                        {id:'c33',tag:'code',name:'Focus management — modals & SPA navigation',why:'Practical a11y requirement — audited in accessibility reviews',explain:'On modal open: focus on first focusable element or modal container (tabindex="-1"). Trap: Tab/Shift+Tab must not escape. On close: return focus to trigger. SPA: focus on main content after navigation.',task:'Write an Angular trapFocus directive without Angular CDK. Test it using keyboard only.'},
+                    ]},
+            ]},
+    ];
+
+    const FEATURES=[
+        {id:'f0',title:'Project setup & architecture',badge:'Sprint 0',color:'#a0a090',bg:'rgba(160,160,144,.15)',tc:'#a0a090',tasks:[
+                {id:'ft1',txt:'ng new auth-app --strict --routing --style=scss',hint:'--strict enables strictNullChecks. Read tsconfig.json to see what was added.',link:'TS Config'},
+                {id:'ft2',txt:'Configure path aliases: @core @features @shared @env',hint:'compilerOptions.paths. Understand module resolution BEFORE you write code.',link:'TS Module Resolution'},
+                {id:'ft3',txt:'ESLint + Prettier + husky pre-commit hook',hint:'ng add @angular-eslint/schematics. Rules: no-any, explicit-module-boundary-types.',link:'Code Quality'},
+                {id:'ft4',txt:'Folder structure: core/ features/ shared/ — understand each folder',hint:'core: singleton services, interceptors. features: lazy modules. shared: stateless components.',link:'Angular Architecture'},
+            ]},
+        {id:'f1',title:'Auth — registration & login',badge:'Sprint 1',color:'#f06060',bg:'rgba(240,96,96,.15)',tc:'#f06060',tasks:[
+                {id:'ft5',txt:'AuthService with BehaviorSubject<User|null> as state',hint:'BEFORE writing: why BehaviorSubject and not Subject or ReplaySubject?',link:'RxJS State'},
+                {id:'ft6',txt:'Reactive registration form + cross-validation (password match)',hint:'BEFORE writing: how does a validator at FormGroup level work? What is AbstractControl?',link:'Reactive Forms'},
+                {id:'ft7',txt:'AsyncValidator for email uniqueness (mock API + debounce)',hint:'BEFORE writing: when does AsyncValidator fire? How do you add debounce?',link:'AsyncValidator'},
+                {id:'ft8',txt:'JWT interceptor — adds Authorization header to every request',hint:'BEFORE writing: why must you clone the request? What is immutability in the HTTP pipeline?',link:'HTTP Interceptor'},
+                {id:'ft9',txt:'Refresh token flow with queuing of parallel requests',hint:'BEFORE writing: draw the flow on paper. BehaviorSubject lock + filter + take(1) = queue.',link:'Refresh Token'},
+                {id:'ft10',txt:'Functional auth guard + redirect with returnUrl',hint:'BEFORE writing: functional guard vs class guard — what changed in Angular 15+?',link:'Guards'},
+            ]},
+        {id:'f2',title:'Roles & authorization',badge:'Sprint 2',color:'#f0a040',bg:'rgba(240,160,64,.15)',tc:'#f0a040',tasks:[
+                {id:'ft11',txt:'Extract roles from JWT payload in AuthService',hint:'BEFORE writing: why can you NOT trust the payload without server-side signature verification?',link:'JWT Roles'},
+                {id:'ft12',txt:'Structural directive *hasRole="\'admin\'" to hide elements',hint:'BEFORE writing: TemplateRef + ViewContainerRef — understand both.',link:'Custom Directive'},
+                {id:'ft13',txt:'Role guard on routes — data: { roles: [\'admin\'] }',hint:'BEFORE writing: how do you pass data from route config to a guard?',link:'Role Guard'},
+                {id:'ft14',txt:'Lazy loading for admin and user feature modules',hint:'BEFORE writing: each lazy module gets its own injector — what does that mean for DI?',link:'Lazy DI'},
+            ]},
+        {id:'f3',title:'UI & accessibility',badge:'Sprint 3',color:'#60d0f0',bg:'rgba(96,208,240,.15)',tc:'#60d0f0',tasks:[
+                {id:'ft15',txt:'ControlValueAccessor for custom password-input with show/hide',hint:'BEFORE writing: how does Angular connect a formControl to a component?',link:'CVA'},
+                {id:'ft16',txt:'Full a11y for forms: aria-label, aria-describedby, focus management',hint:'BEFORE writing: test your form using ONLY the keyboard. Can you fill it without a mouse?',link:'a11y Forms'},
+                {id:'ft17',txt:'Custom pipe for role formatting — use it in TypeScript too',hint:'BEFORE writing: how do you use a pipe outside the template? PipeTransform.transform().',link:'Custom Pipe'},
+                {id:'ft18',txt:'Skeleton loading without a library',hint:'BEFORE writing: CSS animation only on transform/opacity — why? Compositor thread.',link:'Performance CSS'},
+            ]},
+        {id:'f4',title:'Tests',badge:'Sprint 4',color:'#a080f0',bg:'rgba(160,128,240,.15)',tc:'#a080f0',tasks:[
+                {id:'ft19',txt:'Unit tests for AuthService: login, logout, refresh, state changes',hint:'HttpTestingController.expectOne().flush(). Test both success and error paths.',link:'Service Tests'},
+                {id:'ft20',txt:'Login component tests: rendering, validation, submit flow',hint:'fakeAsync for async operations. When do you call fixture.detectChanges()?',link:'Component Tests'},
+                {id:'ft21',txt:'Interceptor tests: token in header, 401 triggers refresh',hint:'Inject interceptor via TestBed + HttpTestingController.',link:'Interceptor Tests'},
+                {id:'ft22',txt:'E2E login flow — Cypress or Playwright',hint:'cy.intercept() mocks the API. Never hit the real backend in E2E tests.',link:'E2E Tests'},
+            ]},
+    ];
+
+    const QUESTIONS=[
+        {cat:'JavaScript',qs:[
+                {id:'q1',lvl:'j',q:'What does the new keyword do, step by step?',a:'1) Creates empty {}. 2) Sets __proto__ to Fn.prototype. 3) Calls Fn with this = that object. 4) If Fn returns a primitive → return the object from step 1. If Fn returns an object → return that object. Classic task: implement myNew(Fn, ...args).'},
+                {id:'q2',lvl:'j',q:'What is the difference between null and undefined?',a:'undefined: variable declared but not assigned, missing parameter, missing return. null: intentional "no value" assigned explicitly. typeof null === "object" (historical bug). null == undefined is true (abstract equality), null === undefined is false (strict).'},
+                {id:'q3',lvl:'m',q:'Scope vs context (this) — what is the difference?',a:'Scope: which variables are accessible — determined by where the function is DEFINED (lexical, static). Context (this): the calling object — determined by how the function is CALLED (dynamic). Exception: arrow functions have lexical this — they borrow it from their definition site, not the call site.'},
+                {id:'q4',lvl:'m',q:'What is a closure and how does lexical environment work?',a:'Closure = function + a persistent reference to its lexical environment at the time of definition. Lexical environment: Environment Record (local variables) + outer reference (link to parent env). Lookup: local → outer → global → ReferenceError. GC will not free the environment while the closure is alive.'},
+                {id:'q5',lvl:'m',q:'switchMap / mergeMap / concatMap / exhaustMap — differences?',a:'switchMap: cancels previous, subscribes to new — ideal for search/autocomplete. mergeMap: all in parallel, does not wait — parallel file uploads. concatMap: FIFO queue, waits for each to finish — when order matters. exhaustMap: ignores new when previous is still running — prevents double-submit.'},
+                {id:'q6',lvl:'s',q:'How does the prototype chain work? prototype vs __proto__?',a:'prototype: property on a function — the object that BECOMES the __proto__ of instances. __proto__: link from an instance to its prototype (implementation of [[Prototype]]). Chain: instance.__proto__ === Class.prototype → Object.prototype → null. instanceof checks whether Fn.prototype appears anywhere in the __proto__ chain.'},
+                {id:'q7',lvl:'s',q:'What is trampolining and when would you use it?',a:'A technique to simulate TCO without engine support. Problem: deep recursion → stack overflow. Trampolining: instead of fn() calling fn() recursively, each call returns a thunk (function). An outer while loop calls successive thunks — the call stack never grows because each call returns before the next starts.'},
+            ]},
+        {cat:'TypeScript',qs:[
+                {id:'q8',lvl:'j',q:'interface vs type — when to use each?',a:'interface: declaration merging, extends, clearer for OOP/classes. type: union, intersection, mapped/conditional types, template literal types — more expressive for complex manipulation. In Angular: use abstract class as DI token (interface disappears after compilation).'},
+                {id:'q9',lvl:'m',q:'Discriminating union + exhaustive check — how does it work?',a:'A literal type as discriminant: type Result = {status:"ok",data:T}|{status:"err",msg:string}. TS narrows via switch(r.status). Exhaustive check: in default case, assign to never — const _: never = r. TS throws a compile error if any variant is unhandled.'},
+                {id:'q10',lvl:'m',q:'How does the infer keyword work?',a:'Used in conditional types to extract types. Syntax: T extends SomeType<infer U> ? U : never. Works ONLY in the extends clause. Examples: ReturnType<T> = T extends (...args:any[])=>infer R ? R : never. UnwrapPromise<T> = T extends Promise<infer U> ? U : T.'},
+                {id:'q11',lvl:'s',q:'satisfies vs as — when to use each?',a:'as Type: forced cast — tells TS to trust you, can hide real errors. satisfies Type (TS 4.9): validates conformance BUT keeps the narrower inferred type. Example: {port:3000} satisfies Config — port has type 3000 (literal), not number. Prefer satisfies for initialization data; use as only when you genuinely know more than the compiler.'},
+                {id:'q12',lvl:'s',q:'Decorator composition in TypeScript — evaluation vs execution order?',a:'Evaluation (reading expressions): top to bottom. Execution (calling decorators): bottom to top. @A @B class Foo: A is evaluated → B is evaluated → B(Foo) is called → A(result of B) is called. Mathematical analogy: compose(A,B)(class) = A(B(class)).'},
+            ]},
+        {cat:'Angular',qs:[
+                {id:'q13',lvl:'j',q:'constructor vs ngOnInit — what is the difference?',a:'constructor: Angular injects dependencies via DI. DOM does not exist yet, @Input values are not set, @ViewChild is null. Use ONLY to assign injected services. ngOnInit: called after first ngOnChanges — @Input values are available, safe to initialize business logic. Never make HTTP calls in the constructor.'},
+                {id:'q14',lvl:'j',q:'OnPush — when is the component checked?',a:'With OnPush, Angular checks the component ONLY when: 1) an @Input reference changes (object mutation is NOT enough), 2) an event fires in this component or its children, 3) markForCheck() or detectChanges() is called explicitly, 4) an async pipe emits a new value. Best practice: always use OnPush for pure components.'},
+                {id:'q15',lvl:'m',q:'Why do we clone the request in an interceptor?',a:'HttpRequest is immutable by design. Cloning ensures: pipeline safety (nobody modifies the request in flight), retry capability (original remains unchanged), clean data flow. request.clone({setHeaders:{Authorization:token}}) creates a new object with only specified fields overridden.'},
+                {id:'q16',lvl:'m',q:'How does async pipe work with OnPush?',a:'async pipe: on every new emission it calls markForCheck() — not detectChanges(). markForCheck() marks the component and ALL its ancestors as dirty in the CD tree. Angular checks them in the next CD cycle. This is why async pipe + OnPush is the safe, efficient combination.'},
+                {id:'q17',lvl:'m',q:'Injector hierarchy — how does it affect singletons?',a:'Root (providedIn:"root"): one singleton for the whole app. Lazy module injector: new instance per lazy-loaded module if declared in module providers. Element injector (component providers:[]): new instance per component instance. Example: AuthService in root = singleton. LoaderService in component = each component gets its own.'},
+                {id:'q18',lvl:'s',q:'ExpressionChangedAfterItHasBeenCheckedError — cause and fix?',a:'DEV MODE only: Angular runs a 2nd CD pass to detect unstable bindings. If a binding value changed between passes → error. Causes: mutating state in ngAfterViewInit, child modifying parent data. Fixes: 1) setTimeout(()=>{this.val=x}), 2) Promise.resolve().then(()=>{...}), 3) ChangeDetectorRef.detectChanges() in AfterViewInit, 4) redesign to unidirectional data flow.'},
+                {id:'q19',lvl:'s',q:'shareReplay(1) vs shareReplay({bufferSize:1, refCount:true})?',a:'shareReplay(1) = {bufferSize:1, refCount:FALSE} — never unsubscribes from source even with 0 subscribers → memory leak, especially with HTTP. shareReplay({bufferSize:1, refCount:true}): unsubscribes when subscriber count drops to 0. ALWAYS use {refCount:true} unless you intentionally want a permanent hot stream.'},
+            ]},
+        {cat:'Security & Auth',qs:[
+                {id:'q20',lvl:'j',q:'localStorage vs HttpOnly cookie for JWT — which to choose?',a:'localStorage: easy JS access, XSS vulnerable — script can steal the token. HttpOnly cookie: inaccessible from JS, XSS-resistant, CSRF-vulnerable (mitigated by SameSite=Strict/Lax + CSRF token). For enterprise: HttpOnly + SameSite. There is no perfect answer — it is always a threat model trade-off.'},
+                {id:'q21',lvl:'m',q:'Refresh token flow — how to avoid logging the user out on a 401?',a:'Interceptor catches 401 → checks it is not /refresh (avoids infinite loop) → calls refreshToken() → on success: store new token, retry original via next.handle(clonedReq) → on failure: logout. Concurrency: BehaviorSubject(false) as isRefreshing flag + filter(v=>v!==null) + take(1) + switchMap queues all waiting requests.'},
+                {id:'q22',lvl:'m',q:'How does Angular protect against XSS?',a:'Angular sanitizes: {{ }} interpolation, [property] binding, [attr.] binding — values are escaped before DOM insertion. Dangerous: DomSanitizer.bypassSecurityTrust*, [innerHTML] with unsanitized data. Best additional layer: Content Security Policy header (script-src \'self\') blocks inline scripts even if XSS is injected.'},
+                {id:'q23',lvl:'s',q:'What is PKCE and why do SPAs need it?',a:'PKCE (Proof Key for Code Exchange): OAuth extension for public clients. SPAs cannot have client_secret. Flow: 1) generate code_verifier (random), 2) code_challenge = BASE64URL(SHA256(verifier)), 3) send challenge in /authorize, 4) receive auth code, 5) send code + verifier to /token, 6) server verifies SHA256(verifier) === challenge. Intercepting the code is useless without the verifier.'},
+            ]},
+        {cat:'Accessibility (a11y)',qs:[
+                {id:'q24',lvl:'j',q:'When to use ARIA, when to use semantic HTML?',a:'Rule 1: semantic HTML is ALWAYS the first choice — <button> gives you keyboard support, focus management, click handling, and role="button" for free. ARIA only when HTML is not sufficient. Rule 2: never use ARIA to fix non-semantic HTML — <div role="button"> is an anti-pattern.'},
+                {id:'q25',lvl:'m',q:'How do you implement a focus trap in a modal?',a:'1) Find all focusable elements (button, input, a[href], [tabindex]:not([tabindex="-1"])). 2) On Tab: if focus is on last → move to first. Shift+Tab: if on first → move to last. 3) On open: focus first focusable or modal container (tabindex="-1"). 4) On close: return focus to the trigger element (save reference before opening). In Angular: use cdkTrapFocus from Angular CDK.'},
+            ]},
+    ];
+
+    const SKILLS=[
+        {id:'sk-js',label:'JS',title:'JavaScript — deep dive',color:'#f0a040',bg:'rgba(240,160,64,.15)',tc:'#f0a040',sections:[
+                {l:'Objects',items:[
+                        {id:'sk1',tag:'must',n:'Object.keys/values/entries',d:'Iteration, conversion, vs for..in'},
+                        {id:'sk2',tag:'must',n:'Object.assign & spread',d:'Shallow copy, merge, reference pitfalls'},
+                        {id:'sk3',tag:'must',n:'Object.freeze/seal',d:'Immutability, differences, deep freeze'},
+                        {id:'sk4',tag:'must',n:'Property descriptor',d:'writable, enumerable, configurable, get/set'},
+                        {id:'sk5',tag:'must',n:'Object as hash map',d:'Map vs Object, Object.create(null)'},
+                        {id:'sk6',tag:'mid',n:'Symbol as key',d:'Privacy, Symbol.iterator, well-known symbols'},
+                    ]},
+                {l:'Arrays',items:[
+                        {id:'sk7',tag:'must',n:'map/filter/reduce',d:'FP foundation, reduce as generalization'},
+                        {id:'sk8',tag:'must',n:'flat/flatMap',d:'Flattening, depth=1 vs Infinity'},
+                        {id:'sk9',tag:'must',n:'find/findIndex/includes',d:'O(n), when to use Set instead'},
+                        {id:'sk10',tag:'must',n:'splice vs slice',d:'Mutating vs non-mutating cut'},
+                        {id:'sk11',tag:'mid',n:'sort — comparator',d:'Default sort is a trap. Sort stability.'},
+                        {id:'sk12',tag:'mid',n:'Array.from/Array.of',d:'Creating from iterables, NodeList → Array'},
+                    ]},
+                {l:'Functions',items:[
+                        {id:'sk13',tag:'must',n:'this — 4 rules',d:'Method, function, arrow, new — every case'},
+                        {id:'sk14',tag:'must',n:'call/apply/bind',d:'Differences, partial application via bind'},
+                        {id:'sk15',tag:'must',n:'arguments vs rest params',d:'Array-like vs real array, arrow fn'},
+                        {id:'sk16',tag:'must',n:'Closures',d:'Lexical env, scope chain, memory, var in loop trap'},
+                        {id:'sk17',tag:'must',n:'Currying',d:'f(a)(b)(c), implementation, fn.length'},
+                        {id:'sk18',tag:'mid',n:'Memoization',d:'Cache, object key problem, WeakMap, LRU'},
+                    ]},
+            ]},
+        {id:'sk-ts',label:'TS',title:'TypeScript',color:'#a080f0',bg:'rgba(160,128,240,.15)',tc:'#a080f0',sections:[
+                {l:'Types',items:[
+                        {id:'sk19',tag:'must',n:'Generics + constraints',d:'<T extends U>, infer, default type params'},
+                        {id:'sk20',tag:'must',n:'Discriminating unions',d:'Literal discriminant, exhaustive check, never'},
+                        {id:'sk21',tag:'must',n:'Mapped types',d:'keyof, in, remap — Partial/Required under the hood'},
+                        {id:'sk22',tag:'must',n:'Conditional types',d:'extends ? X : Y, distributive, infer'},
+                        {id:'sk23',tag:'must',n:'satisfies vs as',d:'Safe validation vs forced cast'},
+                        {id:'sk24',tag:'mid',n:'Template literal types',d:'type EventName = `on${string}`'},
+                        {id:'sk25',tag:'mid',n:'Advanced utility types',d:'ReturnType, Parameters, InstanceType'},
+                    ]},
+                {l:'Classes & Decorators',items:[
+                        {id:'sk26',tag:'must',n:'abstract class vs interface',d:'When to use each, DI token, Angular context'},
+                        {id:'sk27',tag:'must',n:'Decorators — order',d:'Evaluation vs execution, composition'},
+                        {id:'sk28',tag:'mid',n:'override keyword',d:'Safe method overriding from parent'},
+                        {id:'sk29',tag:'mid',n:'Decorator metadata',d:'Reflect.metadata, emitDecoratorMetadata'},
+                    ]},
+            ]},
+        {id:'sk-ng',label:'Angular',title:'Angular',color:'#f06060',bg:'rgba(240,96,96,.15)',tc:'#f06060',sections:[
+                {l:'Core',items:[
+                        {id:'sk30',tag:'must',n:'Change Detection',d:'Default vs OnPush, markForCheck, detectChanges'},
+                        {id:'sk31',tag:'must',n:'Signals',d:'signal(), computed(), effect(), input()'},
+                        {id:'sk32',tag:'must',n:'DI — injector tree',d:'Root/module/element, providedIn, inject()'},
+                        {id:'sk33',tag:'must',n:'InjectionToken',d:'useFactory, useValue, multi:true'},
+                        {id:'sk34',tag:'must',n:'Lifecycle hooks',d:'Order, constructor vs OnInit, DestroyRef'},
+                        {id:'sk35',tag:'must',n:'HTTP interceptors',d:'Cloning, order, context, 401 flow'},
+                    ]},
+                {l:'RxJS',items:[
+                        {id:'sk36',tag:'must',n:'Higher-order operators',d:'switch/merge/concat/exhaustMap — when to use'},
+                        {id:'sk37',tag:'must',n:'BehaviorSubject as store',d:'State management without NgRx'},
+                        {id:'sk38',tag:'must',n:'takeUntilDestroyed',d:'Angular 16+, DestroyRef, old pattern'},
+                        {id:'sk39',tag:'mid',n:'shareReplay pitfalls',d:'refCount:true, memory leak prevention'},
+                        {id:'sk40',tag:'mid',n:'combineLatest/withLatestFrom',d:'Differences and when to use each'},
+                    ]},
+                {l:'Forms & Routing',items:[
+                        {id:'sk41',tag:'must',n:'Reactive forms — advanced',d:'FormArray, cross-validation, AsyncValidator'},
+                        {id:'sk42',tag:'must',n:'ControlValueAccessor',d:'Custom input as a form control'},
+                        {id:'sk43',tag:'must',n:'Typed Forms (Angular 14+)',d:'FormControl<string|null>, strict typing'},
+                        {id:'sk44',tag:'must',n:'Lazy loading + guards',d:'Functional guards, resolvers, route data'},
+                        {id:'sk45',tag:'mid',n:'RouteReuseStrategy',d:'Caching components between navigations'},
+                    ]},
+                {l:'Testing',items:[
+                        {id:'sk46',tag:'must',n:'TestBed configuration',d:'fixture, detectChanges, NO_ERRORS_SCHEMA'},
+                        {id:'sk47',tag:'must',n:'fakeAsync + tick',d:'Time control, debounce, timer tests'},
+                        {id:'sk48',tag:'must',n:'HttpTestingController',d:'expectOne, flush, verify'},
+                        {id:'sk49',tag:'mid',n:'ComponentHarness',d:'CDK harnesses, tests without CSS selectors'},
+                    ]},
+            ]},
+        {id:'sk-sec',label:'Security',title:'Security & Auth',color:'#f060a0',bg:'rgba(240,96,160,.15)',tc:'#f060a0',sections:[
+                {l:'Authentication',items:[
+                        {id:'sk50',tag:'must',n:'JWT flow',d:'Structure, expiry, storage security trade-offs'},
+                        {id:'sk51',tag:'must',n:'Refresh token pattern',d:'Request queuing, BehaviorSubject lock'},
+                        {id:'sk52',tag:'must',n:'OAuth 2.0 + PKCE',d:'Authorization code flow, SPA without client_secret'},
+                        {id:'sk53',tag:'mid',n:'Session vs token',d:'HttpOnly cookie vs localStorage threat model'},
+                    ]},
+                {l:'Attack Vectors',items:[
+                        {id:'sk54',tag:'must',n:'XSS',d:'Types, Angular protection, DomSanitizer, CSP'},
+                        {id:'sk55',tag:'must',n:'CSRF',d:'SameSite, CSRF token, when Angular protects you'},
+                        {id:'sk56',tag:'mid',n:'SSRF',d:'Server-side request forgery, relevant in SSR'},
+                        {id:'sk57',tag:'mid',n:'Injection attacks',d:'HTML/JS injection, sanitization strategies'},
+                    ]},
+            ]},
+        {id:'sk-a11y',label:'a11y',title:'Accessibility',color:'#60d0f0',bg:'rgba(96,208,240,.15)',tc:'#60d0f0',sections:[
+                {l:'ARIA & Semantics',items:[
+                        {id:'sk58',tag:'must',n:'Semantic HTML first',d:'When ARIA is needed vs when HTML suffices'},
+                        {id:'sk59',tag:'must',n:'aria-label/labelledby/describedby',d:'Labels, linking error messages to inputs'},
+                        {id:'sk60',tag:'must',n:'aria-live regions',d:'Dynamic updates, polite vs assertive'},
+                        {id:'sk61',tag:'must',n:'Focus management',d:'tabindex, focus trap, after SPA navigation'},
+                        {id:'sk62',tag:'must',n:'Keyboard navigation',d:'Tab, Enter, Space, Escape — no mouse required'},
+                        {id:'sk63',tag:'mid',n:'WCAG 2.1 AA',d:'Contrast 4.5:1, perceivable/operable/understandable'},
+                    ]},
+            ]},
+    ];
+
+    // ── UI HELPERS ────────────────────────────────────────────────────────────────
+
+    function allConcepts(){ return SPRINTS.flatMap(s=>s.sections.flatMap(sec=>sec.concepts)); }
+    function allTasks(){    return FEATURES.flatMap(f=>f.tasks); }
+    function allItems(){    return SKILLS.flatMap(d=>d.sections.flatMap(s=>s.items)); }
+
+    function updateLearnStats(){
+        const all=allConcepts(),done=all.filter(c=>S['c_'+c.id]).length;
+        document.getElementById('ld').textContent=done;
+        document.getElementById('lt').textContent=all.length;
+        document.getElementById('lp').textContent=Math.round(done/all.length*100)+'%';
+    }
+    function updateSprintBar(sid){
+        const sp=SPRINTS.find(s=>s.id===sid),all=sp.sections.flatMap(s=>s.concepts);
+        const done=all.filter(c=>S['c_'+c.id]).length,bar=document.getElementById('bar-'+sid);
+        if(bar){bar.style.width=(all.length?done/all.length*100:0)+'%';bar.style.background=sp.color;}
+    }
+    function updateProjectStats(){
+        const all=allTasks(),done=all.filter(t=>S['t_'+t.id]).length;
+        document.getElementById('pd').textContent=done;
+        document.getElementById('pt').textContent=all.length;
+        document.getElementById('pp').textContent=Math.round(done/all.length*100)+'%';
+    }
+    function updateSkillStats(){
+        const all=allItems(),done=all.filter(i=>S['sk_'+i.id]).length;
+        document.getElementById('skd').textContent=done;
+        document.getElementById('skt').textContent=all.length;
+        document.getElementById('skp').textContent=Math.round(done/all.length*100)+'%';
+    }
+    function updateSkillBar(domId){
+        const dom=SKILLS.find(d=>d.id===domId),items=dom.sections.flatMap(s=>s.items);
+        const done=items.filter(i=>S['sk_'+i.id]).length,bar=document.getElementById('skbar-'+domId);
+        if(bar){bar.style.width=(items.length?done/items.length*100:0)+'%';bar.style.background=dom.color;}
+    }
+
+    function rebuildUI(){
+        allConcepts().forEach(c=>{
+            const el=document.getElementById('concept-'+c.id);
+            if(!el)return;
+            el.classList.toggle('cdone',!!S['c_'+c.id]);
+            const btn=document.getElementById('dbtn-'+c.id);
+            if(btn)btn.textContent=S['c_'+c.id]?'✓ Done':'Mark as done';
+        });
+        SPRINTS.forEach(s=>updateSprintBar(s.id));
+        updateLearnStats();
+        allTasks().forEach(t=>{
+            const el=document.getElementById('task-'+t.id);
+            if(!el)return;
+            el.classList.toggle('tdone',!!S['t_'+t.id]);
+            el.querySelector('.tchk').textContent=S['t_'+t.id]?'✓':'';
+        });
+        updateProjectStats();
+        allItems().forEach(i=>{
+            const el=document.getElementById('ski-'+i.id);
+            if(el)el.classList.toggle('done',!!S['sk_'+i.id]);
+        });
+        SKILLS.forEach(d=>updateSkillBar(d.id));
+        updateSkillStats();
+    }
+
+    // ── GLOBAL ACTIONS ────────────────────────────────────────────────────────────
+
+    window.showTab=function(t){
+        document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['learn','project','interview','skills'][i]===t));
+        document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='tab-'+t));
+    };
+    window.markDone=function(id,sid){
+        S['c_'+id]=!S['c_'+id];save();
+        const el=document.getElementById('concept-'+id);el.classList.toggle('cdone',!!S['c_'+id]);
+        const btn=document.getElementById('dbtn-'+id);if(btn)btn.textContent=S['c_'+id]?'✓ Done':'Mark as done';
+        updateLearnStats();updateSprintBar(sid);
+    };
+    window.toggleTask=function(id){
+        S['t_'+id]=!S['t_'+id];save();
+        const el=document.getElementById('task-'+id);el.classList.toggle('tdone',!!S['t_'+id]);el.querySelector('.tchk').textContent=S['t_'+id]?'✓':'';
+        updateProjectStats();
+    };
+    window.toggleSkillItem=function(id,domId){
+        S['sk_'+id]=!S['sk_'+id];save();
+        document.getElementById('ski-'+id).classList.toggle('done',!!S['sk_'+id]);
+        updateSkillStats();updateSkillBar(domId);
+    };
+    window.resetLearn=function(){
+        if(!confirm('Reset learning progress?'))return;
+        allConcepts().forEach(c=>delete S['c_'+c.id]);save();
+        document.querySelectorAll('.concept').forEach(el=>el.classList.remove('cdone','copen'));
+        SPRINTS.forEach(s=>updateSprintBar(s.id));updateLearnStats();
+    };
+    window.resetProject=function(){
+        if(!confirm('Reset project progress?'))return;
+        allTasks().forEach(t=>delete S['t_'+t.id]);save();
+        document.querySelectorAll('.task').forEach(el=>{el.classList.remove('tdone');el.querySelector('.tchk').textContent='';});
+        updateProjectStats();
+    };
+    window.resetSkills=function(){
+        if(!confirm('Reset skills progress?'))return;
+        allItems().forEach(i=>delete S['sk_'+i.id]);save();
+        document.querySelectorAll('.skill-item').forEach(el=>el.classList.remove('done'));
+        SKILLS.forEach(d=>updateSkillBar(d.id));updateSkillStats();
+    };
+
+    function toggleBlock(id){document.getElementById('blk-'+id).classList.toggle('open');}
+    function toggleConcept(id){document.getElementById('concept-'+id).classList.toggle('copen');}
+    window.toggleBlock=toggleBlock;window.toggleConcept=toggleConcept;
+
+    let activeSF='all';
+    window.applySkillFilter=function(f){
+        activeSF=f;
+        document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('active',b.dataset.f===f));
+        document.querySelectorAll('.skill-item').forEach(el=>{ el.style.display=(f==='all'||el.dataset.tag===f)?'':'none'; });
+        document.querySelectorAll('.skill-grid').forEach(g=>{ const v=[...g.querySelectorAll('.skill-item')].some(el=>el.style.display!=='none'); g.parentElement.style.display=v?'':'none'; });
+    };
+
+    // ── RENDER ────────────────────────────────────────────────────────────────────
+
+    function renderLearn(){
+        const root=document.getElementById('sprints-root');
+        SPRINTS.forEach((sp,si)=>{
+            const div=document.createElement('div');div.className='block'+(si===0?' open':'');div.id='blk-'+sp.id;
+            const sH=sp.sections.map(sec=>`
+      <div class="sec-lbl">${sec.l}</div>
+      ${sec.concepts.map(c=>`
+        <div class="concept${S['c_'+c.id]?' cdone':''}" id="concept-${c.id}">
+          <div class="ch" onclick="toggleConcept('${c.id}')">
+            <span class="ctag tag-${c.tag}">${c.tag==='theory'?'🧠 theory':c.tag==='code'?'💻 code':'🎤 interview'}</span>
+            <span class="cname">${c.name}</span>
+            <i class="ti ti-chevron-down cchev"></i>
+          </div>
+          <div class="cbody">
+            <div class="explain-block"><div class="explain-lbl">Why it matters</div><div class="explain-text">${c.why}</div></div>
+            <div class="explain-block"><div class="explain-lbl">Key concepts</div><div class="explain-text">${c.explain}</div></div>
+            <div class="explain-block"><div class="explain-lbl">Live coding task</div><div class="explain-text">${c.task}</div></div>
+            <button class="done-btn" id="dbtn-${c.id}" onclick="markDone('${c.id}','${sp.id}')">${S['c_'+c.id]?'✓ Done':'Mark as done'}</button>
+          </div>
+        </div>`).join('')}`).join('');
+            div.innerHTML=`<div class="bh" onclick="toggleBlock('${sp.id}')"><span class="bbadge" style="background:${sp.bg};color:${sp.tc}">${sp.title.split(' ')[0]}</span><span class="btitle">${sp.title}</span><span class="bmeta">${sp.time}</span><i class="ti ti-chevron-down chev"></i></div><div class="prog-wrap"><div class="prog-bar" id="bar-${sp.id}" style="width:0%"></div></div><div class="bbody">${sH}</div>`;
+            root.appendChild(div);updateSprintBar(sp.id);
+        });
+        updateLearnStats();
+    }
+
+    function renderProject(){
+        const root=document.getElementById('features-root');
+        FEATURES.forEach((f,fi)=>{
+            const div=document.createElement('div');div.className='block'+(fi===0?' open':'');div.id='blk-feat-'+f.id;
+            div.innerHTML=`<div class="bh" onclick="toggleBlock('feat-${f.id}')"><span class="bbadge" style="background:${f.bg};color:${f.tc}">${f.badge}</span><span class="btitle">${f.title}</span><i class="ti ti-chevron-down chev"></i></div><div class="bbody">${f.tasks.map(t=>`<div class="task${S['t_'+t.id]?' tdone':''}" id="task-${t.id}" onclick="toggleTask('${t.id}')"><div class="tchk">${S['t_'+t.id]?'✓':''}</div><div><div class="ttxt">${t.txt}</div><div class="thint">💡 ${t.hint}</div><div class="tlink">📚 ${t.link}</div></div></div>`).join('')}</div>`;
+            root.appendChild(div);
+        });
+        updateProjectStats();
+    }
+
+    function renderInterview(){
+        const root=document.getElementById('questions-root');
+        QUESTIONS.forEach(cat=>{
+            const cd=document.createElement('div');cd.innerHTML=`<div class="qcat">${cat.cat}</div>`;
+            cat.qs.forEach(q=>{
+                const card=document.createElement('div');card.className='qcard';
+                card.innerHTML=`<div class="qh" onclick="this.closest('.qcard').classList.toggle('qopen')"><span class="qlvl lvl-${q.lvl}">${q.lvl==='j'?'Junior':q.lvl==='m'?'Mid':'Senior'}</span><span class="qtxt">${q.q}</span><i class="ti ti-chevron-down qchev"></i></div><div class="qbody">${q.a}</div>`;
+                cd.appendChild(card);
+            });
+            root.appendChild(cd);
+        });
+    }
+
+    function renderSkills(){
+        const fe=document.getElementById('skill-filters');
+        ['all','must','mid','nice'].forEach(f=>{
+            const btn=document.createElement('button');btn.className='fbtn'+(f==='all'?' active':'');btn.dataset.f=f;
+            btn.textContent=f==='all'?'all':f==='must'?'🔴 must':f==='mid'?'🟡 important':'🟢 nice to have';
+            btn.onclick=()=>window.applySkillFilter(f);fe.appendChild(btn);
+        });
+        const root=document.getElementById('skills-root');
+        SKILLS.forEach((dom,di)=>{
+            const div=document.createElement('div');div.className='block'+(di===0?' open':'');div.id='blk-sk-'+dom.id;
+            const sH=dom.sections.map(sec=>`<div class="sec-lbl">${sec.l}</div><div class="skill-grid">${sec.items.map(item=>`<div class="skill-item${S['sk_'+item.id]?' done':''}" id="ski-${item.id}" data-tag="${item.tag}" onclick="toggleSkillItem('${item.id}','${dom.id}')"><span class="stag tag-${item.tag}">${item.tag==='must'?'🔴 must':item.tag==='mid'?'🟡 mid':'🟢 nice'}</span><div class="sname">${item.n}</div><div class="sdesc">${item.d}</div></div>`).join('')}</div>`).join('');
+            div.innerHTML=`<div class="bh" onclick="toggleBlock('sk-${dom.id}')"><span class="bbadge" style="background:${dom.bg};color:${dom.tc}">${dom.label}</span><span class="btitle">${dom.title}</span><i class="ti ti-chevron-down chev"></i></div><div class="prog-wrap"><div class="prog-bar" id="skbar-${dom.id}" style="width:0%"></div></div><div class="bbody">${sH}</div>`;
+            root.appendChild(div);updateSkillBar(dom.id);
+        });
+        updateSkillStats();
+    }
+
+    renderLearn();
+    renderProject();
+    renderInterview();
+    renderSkills();
+    connect(user);
+</script>
+</body>
+</html>
