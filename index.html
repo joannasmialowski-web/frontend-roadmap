@@ -144,6 +144,19 @@
             .tabs{margin-left:1rem;margin-right:1rem}
             .stats{flex-wrap:wrap}.stat{min-width:calc(50% - 4px)}
         }
+        .notes-section{margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
+        .notes-ta{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;color:var(--text);font-family:var(--mono);font-size:11px;resize:vertical;min-height:56px;outline:none;line-height:1.5}
+        .notes-ta:focus{border-color:var(--border2)}
+        .notes-ta::placeholder{color:var(--text3)}
+        .notes-lbl{font-size:9px;font-weight:600;letter-spacing:.07em;color:var(--text3);margin-bottom:4px;margin-top:8px;font-family:var(--mono);text-transform:uppercase}
+        .notes-lbl:first-child{margin-top:0}
+        .notes-toggle{font-size:10px;padding:1px 7px;border-radius:6px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--text3);font-family:var(--mono);transition:all .12s;flex-shrink:0}
+        .notes-toggle:hover{color:var(--text2);border-color:var(--border2)}
+        .notes-toggle.has-content{color:var(--accent2);border-color:rgba(96,208,240,.3);background:rgba(96,208,240,.06)}
+        .task-notes-panel{padding:8px 12px 10px 38px;border-top:1px solid var(--border);background:var(--bg);display:none}
+        .task-notes-panel.open{display:block}
+        .skill-notes-panel{padding:8px 10px 10px;border-top:1px solid var(--border);background:rgba(0,0,0,.15);display:none}
+        .skill-notes-panel.open{display:block}
     </style>
 </head>
 <body>
@@ -239,6 +252,10 @@
         setDot('syncing','Saving...'); clearTimeout(saveT);
         saveT = setTimeout(()=>{ if(!dbRef)return; set(dbRef,S).then(()=>setDot('synced','Saved · '+user)).catch(()=>setDot('error','Save failed')); }, 700);
     }
+
+    function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    window.saveField=function(key,val){ if(val)S[key]=val; else delete S[key]; save(); };
+    window.toggleNotes=function(id){ document.getElementById('np-'+id).classList.toggle('open'); };
 
     window.setUser = ()=>{ const v=userInput.value.trim(); if(v) connect(v); };
     userInput.addEventListener('keydown', e=>{ if(e.key==='Enter') window.setUser(); });
@@ -544,6 +561,24 @@
         });
         SKILLS.forEach(d=>updateSkillBar(d.id));
         updateSkillStats();
+        allConcepts().forEach(c=>{
+            const nt=document.getElementById('ntxt-'+c.id),lt=document.getElementById('ltxt-'+c.id);
+            if(nt)nt.value=S['notes_'+c.id]||'';if(lt)lt.value=S['links_'+c.id]||'';
+        });
+        allTasks().forEach(t=>{
+            const nt=document.getElementById('ntxt-'+t.id),lt=document.getElementById('ltxt-'+t.id),btn=document.getElementById('nbtn-'+t.id);
+            if(nt)nt.value=S['notes_'+t.id]||'';if(lt)lt.value=S['links_'+t.id]||'';
+            if(btn)btn.classList.toggle('has-content',!!(S['notes_'+t.id]||S['links_'+t.id]));
+        });
+        QUESTIONS.flatMap(c=>c.qs).forEach(q=>{
+            const nt=document.getElementById('ntxt-'+q.id),lt=document.getElementById('ltxt-'+q.id);
+            if(nt)nt.value=S['notes_'+q.id]||'';if(lt)lt.value=S['links_'+q.id]||'';
+        });
+        allItems().forEach(i=>{
+            const nt=document.getElementById('ntxt-'+i.id),lt=document.getElementById('ltxt-'+i.id),btn=document.getElementById('nbtn-'+i.id);
+            if(nt)nt.value=S['notes_'+i.id]||'';if(lt)lt.value=S['links_'+i.id]||'';
+            if(btn)btn.classList.toggle('has-content',!!(S['notes_'+i.id]||S['links_'+i.id]));
+        });
     }
 
     // ── GLOBAL ACTIONS ────────────────────────────────────────────────────────────
@@ -618,6 +653,12 @@
             <div class="explain-block"><div class="explain-lbl">Why it matters</div><div class="explain-text">${c.why}</div></div>
             <div class="explain-block"><div class="explain-lbl">Key concepts</div><div class="explain-text">${c.explain}</div></div>
             <div class="explain-block"><div class="explain-lbl">Live coding task</div><div class="explain-text">${c.task}</div></div>
+            <div class="notes-section">
+              <div class="notes-lbl">My notes</div>
+              <textarea class="notes-ta" id="ntxt-${c.id}" placeholder="Write your notes here..." oninput="saveField('notes_${c.id}',this.value)"></textarea>
+              <div class="notes-lbl">My links</div>
+              <textarea class="notes-ta" id="ltxt-${c.id}" placeholder="Paste useful links (one per line)..." oninput="saveField('links_${c.id}',this.value)" style="min-height:42px"></textarea>
+            </div>
             <button class="done-btn" id="dbtn-${c.id}" onclick="markDone('${c.id}','${sp.id}')">${S['c_'+c.id]?'✓ Done':'Mark as done'}</button>
           </div>
         </div>`).join('')}`).join('');
@@ -631,7 +672,7 @@
         const root=document.getElementById('features-root');
         FEATURES.forEach((f,fi)=>{
             const div=document.createElement('div');div.className='block'+(fi===0?' open':'');div.id='blk-feat-'+f.id;
-            div.innerHTML=`<div class="bh" onclick="toggleBlock('feat-${f.id}')"><span class="bbadge" style="background:${f.bg};color:${f.tc}">${f.badge}</span><span class="btitle">${f.title}</span><i class="ti ti-chevron-down chev"></i></div><div class="bbody">${f.tasks.map(t=>`<div class="task${S['t_'+t.id]?' tdone':''}" id="task-${t.id}" onclick="toggleTask('${t.id}')"><div class="tchk">${S['t_'+t.id]?'✓':''}</div><div><div class="ttxt">${t.txt}</div><div class="thint">💡 ${t.hint}</div><div class="tlink">📚 ${t.link}</div></div></div>`).join('')}</div>`;
+            div.innerHTML=`<div class="bh" onclick="toggleBlock('feat-${f.id}')"><span class="bbadge" style="background:${f.bg};color:${f.tc}">${f.badge}</span><span class="btitle">${f.title}</span><i class="ti ti-chevron-down chev"></i></div><div class="bbody">${f.tasks.map(t=>`<div><div class="task${S['t_'+t.id]?' tdone':''}" id="task-${t.id}" onclick="toggleTask('${t.id}')"><div class="tchk">${S['t_'+t.id]?'✓':''}</div><div style="flex:1"><div class="ttxt">${t.txt}</div><div class="thint">💡 ${t.hint}</div><div class="tlink">📚 ${t.link}</div></div><button class="notes-toggle" id="nbtn-${t.id}" onclick="event.stopPropagation();toggleNotes('${t.id}')">📝</button></div><div class="task-notes-panel" id="np-${t.id}"><div class="notes-lbl">My notes</div><textarea class="notes-ta" id="ntxt-${t.id}" placeholder="Your notes..." oninput="saveField('notes_${t.id}',this.value)"></textarea><div class="notes-lbl">My links</div><textarea class="notes-ta" id="ltxt-${t.id}" placeholder="Links (one per line)..." oninput="saveField('links_${t.id}',this.value)" style="min-height:42px"></textarea></div></div>`).join('')}</div>`;
             root.appendChild(div);
         });
         updateProjectStats();
@@ -643,7 +684,7 @@
             const cd=document.createElement('div');cd.innerHTML=`<div class="qcat">${cat.cat}</div>`;
             cat.qs.forEach(q=>{
                 const card=document.createElement('div');card.className='qcard';
-                card.innerHTML=`<div class="qh" onclick="this.closest('.qcard').classList.toggle('qopen')"><span class="qlvl lvl-${q.lvl}">${q.lvl==='j'?'Junior':q.lvl==='m'?'Mid':'Senior'}</span><span class="qtxt">${q.q}</span><i class="ti ti-chevron-down qchev"></i></div><div class="qbody">${q.a}</div>`;
+                card.innerHTML=`<div class="qh" onclick="this.closest('.qcard').classList.toggle('qopen')"><span class="qlvl lvl-${q.lvl}">${q.lvl==='j'?'Junior':q.lvl==='m'?'Mid':'Senior'}</span><span class="qtxt">${q.q}</span><i class="ti ti-chevron-down qchev"></i></div><div class="qbody">${q.a}<div class="notes-section"><div class="notes-lbl">My notes</div><textarea class="notes-ta" id="ntxt-${q.id}" placeholder="Write your notes here..." oninput="saveField('notes_${q.id}',this.value)"></textarea><div class="notes-lbl">My links</div><textarea class="notes-ta" id="ltxt-${q.id}" placeholder="Paste useful links (one per line)..." oninput="saveField('links_${q.id}',this.value)" style="min-height:42px"></textarea></div></div>`;
                 cd.appendChild(card);
             });
             root.appendChild(cd);
@@ -660,7 +701,7 @@
         const root=document.getElementById('skills-root');
         SKILLS.forEach((dom,di)=>{
             const div=document.createElement('div');div.className='block'+(di===0?' open':'');div.id='blk-sk-'+dom.id;
-            const sH=dom.sections.map(sec=>`<div class="sec-lbl">${sec.l}</div><div class="skill-grid">${sec.items.map(item=>`<div class="skill-item${S['sk_'+item.id]?' done':''}" id="ski-${item.id}" data-tag="${item.tag}" onclick="toggleSkillItem('${item.id}','${dom.id}')"><span class="stag tag-${item.tag}">${item.tag==='must'?'🔴 must':item.tag==='mid'?'🟡 mid':'🟢 nice'}</span><div class="sname">${item.n}</div><div class="sdesc">${item.d}</div></div>`).join('')}</div>`).join('');
+            const sH=dom.sections.map(sec=>`<div class="sec-lbl">${sec.l}</div><div class="skill-grid">${sec.items.map(item=>`<div class="skill-item${S['sk_'+item.id]?' done':''}" id="ski-${item.id}" data-tag="${item.tag}" onclick="toggleSkillItem('${item.id}','${dom.id}')"><span class="stag tag-${item.tag}">${item.tag==='must'?'🔴 must':item.tag==='mid'?'🟡 mid':'🟢 nice'}</span><div class="sname">${item.n}</div><div class="sdesc">${item.d}</div><button class="notes-toggle" id="nbtn-${item.id}" onclick="event.stopPropagation();toggleNotes('${item.id}')">📝</button><div class="skill-notes-panel" id="np-${item.id}" onclick="event.stopPropagation()"><div class="notes-lbl">My notes</div><textarea class="notes-ta" id="ntxt-${item.id}" placeholder="Your notes..." oninput="saveField('notes_${item.id}',this.value)"></textarea><div class="notes-lbl">My links</div><textarea class="notes-ta" id="ltxt-${item.id}" placeholder="Links (one per line)..." oninput="saveField('links_${item.id}',this.value)" style="min-height:36px"></textarea></div></div>`).join('')}</div>`).join('');
             div.innerHTML=`<div class="bh" onclick="toggleBlock('sk-${dom.id}')"><span class="bbadge" style="background:${dom.bg};color:${dom.tc}">${dom.label}</span><span class="btitle">${dom.title}</span><i class="ti ti-chevron-down chev"></i></div><div class="prog-wrap"><div class="prog-bar" id="skbar-${dom.id}" style="width:0%"></div></div><div class="bbody">${sH}</div>`;
             root.appendChild(div);updateSkillBar(dom.id);
         });
