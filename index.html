@@ -167,6 +167,23 @@
         .task-notes-panel.open{display:block}
         .skill-notes-panel{padding:8px 10px 10px;border-top:1px solid var(--border);background:rgba(0,0,0,.15);display:none}
         .skill-notes-panel.open{display:block}
+        .plan-divider{font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--text3);text-transform:uppercase;font-family:var(--mono);margin:1.5rem 0 .75rem;padding-bottom:6px;border-bottom:1px solid var(--border)}
+        .plan-info{font-size:11px;color:var(--text2);line-height:1.6;padding:10px 12px;background:var(--bg3);border-radius:var(--radius);margin-bottom:12px}
+        .plan-info strong{color:var(--text);font-weight:500}
+        .plan-theory-lbl{font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--accent2);border-bottom:1px solid var(--border);padding-bottom:5px;margin:10px 0 8px;text-transform:uppercase;font-family:var(--mono)}
+        .plan-impl-lbl{font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--text3);border-bottom:1px solid var(--border);padding-bottom:5px;margin:14px 0 8px;text-transform:uppercase;font-family:var(--mono)}
+        .pitem{display:flex;gap:10px;align-items:flex-start;padding:8px 12px;border-radius:var(--radius);cursor:pointer;border:1px solid var(--border);margin-bottom:5px;transition:all .12s;background:var(--bg)}
+        .pitem:hover{background:var(--bg2);border-color:var(--border2)}
+        .pitem.pdone{background:rgba(96,208,144,.04);border-color:rgba(96,208,144,.2)}
+        .pitem.pdone .pchk{background:rgba(96,208,144,.2);border-color:rgba(96,208,144,.5);color:var(--success)}
+        .pitem.pdone .ptxt{text-decoration:line-through;color:var(--text2)}
+        .pchk{width:16px;height:16px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px}
+        .ptxt{font-size:12px;font-weight:500;line-height:1.4;font-family:var(--mono)}
+        .concepts-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:1.5rem}
+        .concepts-table th{text-align:left;font-size:9px;font-weight:600;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;font-family:var(--mono);padding:6px 10px;border-bottom:1px solid var(--border)}
+        .concepts-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
+        .concepts-table td:first-child{color:var(--text);font-weight:500}
+        .concepts-table tr:last-child td{border-bottom:none}
     </style>
 </head>
 <body>
@@ -215,6 +232,13 @@
         </div>
         <div class="toolbar"><button class="reset-btn" onclick="resetProject()">↺ reset</button></div>
         <div id="features-root"></div>
+        <div class="plan-divider">📋 Learning Plan</div>
+        <div class="stats">
+            <div class="stat"><div class="stat-num" id="pld">0</div><div class="stat-lbl">completed</div></div>
+            <div class="stat"><div class="stat-num" id="plt">0</div><div class="stat-lbl">total items</div></div>
+            <div class="stat"><div class="stat-num" id="plp">0%</div><div class="stat-lbl">progress</div></div>
+        </div>
+        <div id="plan-root"></div>
     </div>
     <div class="view" id="tab-interview"><div id="questions-root"></div></div>
     <div class="view" id="tab-skills">
@@ -235,7 +259,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
     import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
 
-    // Apply saved theme before first paint
     if(localStorage.getItem('roadmap-theme')==='light') document.body.classList.add('light');
 
     const FB = { apiKey:"AIzaSyAah37NC3Q-x2P1g2byWCkbk69f9-RrL68", authDomain:"frontend-roadmap-28de8.firebaseapp.com", databaseURL:"https://frontend-roadmap-28de8-default-rtdb.europe-west1.firebasedatabase.app", projectId:"frontend-roadmap-28de8", storageBucket:"frontend-roadmap-28de8.firebasestorage.app", messagingSenderId:"1025217815949", appId:"1:1025217815949:web:334974386ea072752309c4" };
@@ -522,11 +545,250 @@
             ]},
     ];
 
+    const PLAN=[
+        {id:'ph1',title:'Phase 1 — Foundation: Modern Angular',color:'#a080f0',bg:'rgba(160,128,240,.15)',tc:'#a080f0',
+         building:'App skeleton, layout, navigation, mock data displayed on screen.',
+         goal:'The app runs, you can navigate between pages, mock roadmap data is visible.',
+         theory:[
+             {id:'p1t1',text:'Standalone components — what they are and why Angular moved away from NgModules'},
+             {id:'p1t2',text:'New template syntax — @if, @for, @switch (replacing *ngIf, *ngFor)'},
+             {id:'p1t3',text:'inject() function — modern alternative to constructor injection'},
+             {id:'p1t4',text:'Signals basics — signal(), computed(), effect()'},
+             {id:'p1t5',text:'Angular routing fundamentals — RouterOutlet, RouterLink, route config'},
+         ],
+         subphases:[
+             {l:'1.1 — Project setup',items:[
+                 {id:'p1i1',text:'Create a new Angular project: ng new roadmap-tracker --standalone --routing --style=scss'},
+                 {id:'p1i2',text:'Understand the generated file structure — what is each file for?'},
+                 {id:'p1i3',text:'Run the app locally: ng serve'},
+                 {id:'p1i4',text:'Delete the boilerplate content from app.component.html'},
+             ]},
+             {l:'1.2 — Routing structure',items:[
+                 {id:'p1i5',text:'Define 3 routes in app.routes.ts: /, /roadmap, /quiz'},
+                 {id:'p1i6',text:'Create 3 placeholder page components: HomeComponent, RoadmapComponent, QuizComponent'},
+                 {id:'p1i7',text:'Add router-outlet to AppComponent'},
+                 {id:'p1i8',text:'Verify that navigating to each route renders the correct component'},
+             ]},
+             {l:'1.3 — Layout and navigation',items:[
+                 {id:'p1i9',text:'Create a NavbarComponent with links to all 3 routes'},
+                 {id:'p1i10',text:'Use RouterLink and RouterLinkActive for navigation'},
+                 {id:'p1i11',text:'Add the navbar to AppComponent'},
+                 {id:'p1i12',text:'Add basic SCSS layout — sidebar or top nav, main content area'},
+             ]},
+             {l:'1.4 — Mock data and first display',items:[
+                 {id:'p1i13',text:'Create roadmap.model.ts — define interfaces: RoadmapSection, RoadmapTask'},
+                 {id:'p1i14',text:'Create a RoadmapService using inject() pattern'},
+                 {id:'p1i15',text:'Add hardcoded mock data to the service (2–3 sections, 3–4 tasks each)'},
+                 {id:'p1i16',text:'In RoadmapComponent, inject the service and display sections using @for'},
+                 {id:'p1i17',text:'Display tasks under each section, also using @for'},
+             ]},
+             {l:'1.5 — Progress with Signals',items:[
+                 {id:'p1i18',text:'Convert mock data in the service to signal()'},
+                 {id:'p1i19',text:'Add a computed() signal that calculates overall completion percentage'},
+                 {id:'p1i20',text:'Display the progress percentage in the UI'},
+                 {id:'p1i21',text:'Verify it updates reactively when you toggle a task (even with mock data)'},
+             ]},
+         ]},
+        {id:'ph2',title:'Phase 2 — Firebase: Data and Authentication',color:'#f06060',bg:'rgba(240,96,96,.15)',tc:'#f06060',
+         building:'Google login, route protection, real data saved to Firestore.',
+         goal:'Users can log in, their data is saved and survives page refresh.',
+         theory:[
+             {id:'p2t1',text:'Angular services — singleton services, providedIn: "root"'},
+             {id:'p2t2',text:'Route Guards — CanActivateFn, protecting routes from unauthenticated users'},
+             {id:'p2t3',text:'RxJS basics — Observable, Subject, async pipe, switchMap'},
+             {id:'p2t4',text:'Firebase Auth — how Google OAuth flow works'},
+             {id:'p2t5',text:'Firestore data model — collections, documents, how to structure user data'},
+             {id:'p2t6',text:'Firestore Security Rules — why they matter, basic rules syntax'},
+         ],
+         subphases:[
+             {l:'2.1 — Firebase project setup',items:[
+                 {id:'p2i1',text:'Create a Firebase project in the Firebase Console'},
+                 {id:'p2i2',text:'Enable Google sign-in in Authentication settings'},
+                 {id:'p2i3',text:'Create a Firestore database (start in test mode)'},
+                 {id:'p2i4',text:'Install Firebase SDK: npm install firebase @angular/fire'},
+                 {id:'p2i5',text:'Add Firebase config to environment.ts and initialize AngularFire in app.config.ts'},
+             ]},
+             {l:'2.2 — Authentication service',items:[
+                 {id:'p2i6',text:'Create AuthService with loginWithGoogle(), logout(), currentUser$ Observable'},
+                 {id:'p2i7',text:'Create a LoginComponent with a "Sign in with Google" button'},
+                 {id:'p2i8',text:'Add the login route to app.routes.ts'},
+                 {id:'p2i9',text:'Test that login and logout work correctly'},
+             ]},
+             {l:'2.3 — Route guard',items:[
+                 {id:'p2i10',text:'Create an authGuard using CanActivateFn'},
+                 {id:'p2i11',text:'The guard should redirect to /login if the user is not authenticated'},
+                 {id:'p2i12',text:'Apply the guard to /roadmap and /quiz routes and test the redirect'},
+             ]},
+             {l:'2.4 — Firestore data structure',items:[
+                 {id:'p2i13',text:'Plan the structure: users/{userId}/roadmaps/{roadmapId}/sections/{sectionId}/tasks/{taskId}'},
+                 {id:'p2i14',text:'Create RoadmapDataService that handles Firestore reads/writes'},
+                 {id:'p2i15',text:'Add method: getUserRoadmaps(userId) — returns Observable of roadmaps'},
+                 {id:'p2i16',text:'Add method: createRoadmap(userId, title) — creates new roadmap document'},
+             ]},
+             {l:'2.5 — Connect UI to real data',items:[
+                 {id:'p2i17',text:'Replace mock data in RoadmapComponent with real Firestore data'},
+                 {id:'p2i18',text:'Use async pipe in the template to subscribe to Observables'},
+                 {id:'p2i19',text:'Add a simple form to create a new roadmap'},
+                 {id:'p2i20',text:'Verify data appears in Firebase Console after creation'},
+             ]},
+             {l:'2.6 — Security Rules',items:[
+                 {id:'p2i21',text:'Update Firestore Security Rules: users can only read/write their own data'},
+                 {id:'p2i22',text:'Test: verify that rules are working (attempt cross-user access should fail)'},
+             ]},
+         ]},
+        {id:'ph3',title:'Phase 3 — Roadmap Management (Full CRUD)',color:'#f0a040',bg:'rgba(240,160,64,.15)',tc:'#f0a040',
+         building:'Full roadmap editor — create, edit, delete sections and tasks, track progress.',
+         goal:'Complete MVP. Anyone can sign in, build their roadmap, and track progress. Portfolio-ready.',
+         theory:[
+             {id:'p3t1',text:'Signals advanced — computed(), effect(), toSignal(), toObservable()'},
+             {id:'p3t2',text:'Reactive Forms — FormGroup, FormControl, Validators, form submission'},
+             {id:'p3t3',text:'Lazy loading — loadComponent() and loadChildren() in route config'},
+             {id:'p3t4',text:'ChangeDetectionStrategy.OnPush — what it is and when to use it'},
+             {id:'p3t5',text:'Angular animations basics — @trigger, transition, animate'},
+         ],
+         subphases:[
+             {l:'3.1 — Section management',items:[
+                 {id:'p3i1',text:'Add methods to RoadmapDataService: createSection(), updateSection(), deleteSection()'},
+                 {id:'p3i2',text:'Build a SectionFormComponent using Reactive Forms'},
+                 {id:'p3i3',text:'Add inline editing for section titles'},
+                 {id:'p3i4',text:'Add delete confirmation before removing a section'},
+             ]},
+             {l:'3.2 — Task management',items:[
+                 {id:'p3i5',text:'Add methods: createTask(), updateTask(), deleteTask()'},
+                 {id:'p3i6',text:'Build a TaskItemComponent with checkbox, edit button, and delete button'},
+                 {id:'p3i7',text:'Each task update should immediately save to Firestore'},
+             ]},
+             {l:'3.3 — Progress tracking with Signals',items:[
+                 {id:'p3i8',text:'Convert Firestore data stream to Signal using toSignal()'},
+                 {id:'p3i9',text:'Create computed() signals: totalTasks, completedTasks, progressPercentage'},
+                 {id:'p3i10',text:'Add a ProgressBarComponent that receives percentage as @Input'},
+                 {id:'p3i11',text:'Display per-section progress as well as overall progress'},
+             ]},
+             {l:'3.4 — Built-in Angular roadmap template',items:[
+                 {id:'p3i12',text:'Create a TemplateService with hardcoded Angular mid/senior roadmap content'},
+                 {id:'p3i13',text:'Add a "Start from template" button on the roadmap creation screen'},
+                 {id:'p3i14',text:'Pre-populate new roadmap with template sections and tasks when selected'},
+                 {id:'p3i15',text:'User can edit, add, or remove items from the template'},
+             ]},
+             {l:'3.5 — Lazy loading',items:[
+                 {id:'p3i16',text:'Move RoadmapComponent to a lazy-loaded route using loadComponent()'},
+                 {id:'p3i17',text:'Move QuizComponent to a lazy-loaded route'},
+                 {id:'p3i18',text:'Verify in DevTools Network tab that chunks load on demand'},
+             ]},
+             {l:'3.6 — OnPush optimization',items:[
+                 {id:'p3i19',text:'Add ChangeDetectionStrategy.OnPush to TaskItemComponent'},
+                 {id:'p3i20',text:'Add ChangeDetectionStrategy.OnPush to ProgressBarComponent'},
+                 {id:'p3i21',text:'Verify that the app still works correctly after this change'},
+             ]},
+         ]},
+        {id:'ph4',title:'Phase 4 — AI Quiz',color:'#f060a0',bg:'rgba(240,96,160,.15)',tc:'#f060a0',
+         building:'AI-generated quiz questions based on the current roadmap section.',
+         goal:'Click "Test your knowledge" on any section → get a 5-question quiz generated by AI.',
+         theory:[
+             {id:'p4t1',text:'HTTP interceptors — HttpInterceptorFn, adding headers, handling errors globally'},
+             {id:'p4t2',text:'Error handling in Angular — catchError, user-friendly error messages'},
+             {id:'p4t3',text:'Firebase Functions — what they are, why you need them (keeping API keys secure)'},
+             {id:'p4t4',text:'Anthropic API basics — how to send a message, what the response looks like'},
+             {id:'p4t5',text:'Prompt engineering — how to write a prompt that reliably returns structured data'},
+         ],
+         subphases:[
+             {l:'4.1 — Firebase Functions setup',items:[
+                 {id:'p4i1',text:'Install Firebase CLI: npm install -g firebase-tools'},
+                 {id:'p4i2',text:'Run firebase init functions in your project directory (choose TypeScript)'},
+                 {id:'p4i3',text:'Understand the generated functions/src/index.ts file'},
+             ]},
+             {l:'4.2 — Quiz generation function',items:[
+                 {id:'p4i4',text:'Install Anthropic SDK in functions: npm install @anthropic-ai/sdk'},
+                 {id:'p4i5',text:'Store API key: firebase functions:secrets:set ANTHROPIC_API_KEY'},
+                 {id:'p4i6',text:'Create callable Firebase Function generateQuiz: input { sectionTitle, tasks[] }'},
+                 {id:'p4i7',text:'Write prompt so Claude returns valid JSON (5 multiple-choice questions, no markdown)'},
+                 {id:'p4i8',text:'Deploy the function: firebase deploy --only functions'},
+             ]},
+             {l:'4.3 — Quiz service in Angular',items:[
+                 {id:'p4i9',text:'Create QuizService that calls the Firebase Function using httpsCallable'},
+                 {id:'p4i10',text:'Add loading state and error state handling'},
+                 {id:'p4i11',text:'Create TypeScript interfaces: QuizQuestion and QuizResult'},
+             ]},
+             {l:'4.4 — Quiz UI',items:[
+                 {id:'p4i12',text:'Add a "Test your knowledge" button to each section in RoadmapComponent'},
+                 {id:'p4i13',text:'Create QuizComponent with 3 states: Loading, Question, Result'},
+                 {id:'p4i14',text:'Highlight correct/incorrect answers after each question'},
+                 {id:'p4i15',text:'Show final score with option to retry'},
+             ]},
+             {l:'4.5 — HTTP interceptor',items:[
+                 {id:'p4i16',text:'Create an AuthInterceptor that adds Firebase auth token to outgoing requests'},
+                 {id:'p4i17',text:'Register it in app.config.ts'},
+                 {id:'p4i18',text:'Use it to authenticate calls to Firebase Functions'},
+             ]},
+         ]},
+        {id:'ph5',title:'Phase 5 — AI Roadmap Generator',color:'#60d090',bg:'rgba(96,208,144,.15)',tc:'#60d090',
+         building:'User describes their learning goal → AI generates a full roadmap.',
+         goal:'Type "I want to learn React in 2 months" → get a ready-to-use roadmap, editable before saving.',
+         theory:[
+             {id:'p5t1',text:'Structured outputs — prompting AI to return consistent JSON schemas'},
+             {id:'p5t2',text:'Angular animations — animating route transitions, list items appearing'},
+             {id:'p5t3',text:'Unit testing basics — TestBed, ComponentFixture, testing services'},
+             {id:'p5t4',text:'End-to-end testing basics — Cypress or Playwright setup'},
+         ],
+         subphases:[
+             {l:'5.1 — Roadmap generator function',items:[
+                 {id:'p5i1',text:'Create Firebase Function generateRoadmap: input { goal, timeframe, currentLevel }'},
+                 {id:'p5i2',text:'Write prompt that returns JSON: array of sections with title and task titles'},
+                 {id:'p5i3',text:'Add error handling for malformed JSON responses'},
+                 {id:'p5i4',text:'Deploy and test using Firebase Functions logs'},
+             ]},
+             {l:'5.2 — Generator UI',items:[
+                 {id:'p5i5',text:'Create GeneratorComponent: form with learning goal, timeframe, current level'},
+                 {id:'p5i6',text:'Show loading state while AI is working (skeleton screen or animated placeholder)'},
+                 {id:'p5i7',text:'Display a preview of the generated roadmap before saving'},
+             ]},
+             {l:'5.3 — Preview and save flow',items:[
+                 {id:'p5i8',text:'Show read-only preview of all generated sections and tasks'},
+                 {id:'p5i9',text:'Allow user to edit the roadmap title before saving'},
+                 {id:'p5i10',text:'"Save roadmap" button — saves to Firestore using RoadmapDataService'},
+                 {id:'p5i11',text:'"Regenerate" button — runs the generator again with the same inputs'},
+                 {id:'p5i12',text:'On save, navigate to the new roadmap'},
+             ]},
+             {l:'5.4 — Unit tests',items:[
+                 {id:'p5i13',text:'Write tests for AuthService — mock Firebase Auth'},
+                 {id:'p5i14',text:'Write tests for RoadmapDataService — mock Firestore'},
+                 {id:'p5i15',text:'Write tests for ProgressBarComponent — test it renders the correct width'},
+                 {id:'p5i16',text:'Write tests for the quiz score calculation logic'},
+             ]},
+             {l:'5.5 — Polish and deploy',items:[
+                 {id:'p5i17',text:'Add route transition animations'},
+                 {id:'p5i18',text:'Handle all loading and error states consistently across the app'},
+                 {id:'p5i19',text:'Add a 404 page for unknown routes'},
+                 {id:'p5i20',text:'Deploy to Firebase Hosting: firebase deploy'},
+                 {id:'p5i21',text:'Test the deployed app on mobile'},
+             ]},
+         ]},
+    ];
+
+    const CONCEPTS_TABLE=[
+        {concept:'Standalone components',phase:'Phase 1'},
+        {concept:'Signals — signal(), computed(), effect()',phase:'Phase 1 & 3'},
+        {concept:'New template syntax — @if, @for',phase:'Phase 1'},
+        {concept:'inject() pattern',phase:'Phase 1'},
+        {concept:'Routing + RouterLink',phase:'Phase 1'},
+        {concept:'Services — providedIn: "root"',phase:'Phase 1'},
+        {concept:'Route Guards — CanActivateFn',phase:'Phase 2'},
+        {concept:'RxJS basics + async pipe',phase:'Phase 2'},
+        {concept:'Reactive Forms',phase:'Phase 3'},
+        {concept:'Lazy loading — loadComponent()',phase:'Phase 3'},
+        {concept:'ChangeDetectionStrategy.OnPush',phase:'Phase 3'},
+        {concept:'HTTP Interceptors',phase:'Phase 4'},
+        {concept:'Firebase Functions (backend)',phase:'Phase 4'},
+        {concept:'Unit testing — TestBed',phase:'Phase 5'},
+        {concept:'Angular Animations',phase:'Phase 5'},
+    ];
+
     // ── UI HELPERS ────────────────────────────────────────────────────────────────
 
     function allConcepts(){ return SPRINTS.flatMap(s=>s.sections.flatMap(sec=>sec.concepts)); }
     function allTasks(){    return FEATURES.flatMap(f=>f.tasks); }
     function allItems(){    return SKILLS.flatMap(d=>d.sections.flatMap(s=>s.items)); }
+    function allPlanItems(){ return PLAN.flatMap(ph=>[...ph.theory,...ph.subphases.flatMap(s=>s.items)]); }
 
     function updateLearnStats(){
         const all=allConcepts(),done=all.filter(c=>S['c_'+c.id]).length;
@@ -550,6 +812,17 @@
         document.getElementById('skd').textContent=done;
         document.getElementById('skt').textContent=all.length;
         document.getElementById('skp').textContent=Math.round(done/all.length*100)+'%';
+    }
+    function updatePlanStats(){
+        const all=allPlanItems(),done=all.filter(i=>S['plan_'+i.id]).length;
+        document.getElementById('pld').textContent=done;
+        document.getElementById('plt').textContent=all.length;
+        document.getElementById('plp').textContent=Math.round(done/all.length*100)+'%';
+    }
+    function updatePlanBar(phaseId){
+        const ph=PLAN.find(p=>p.id===phaseId),items=[...ph.theory,...ph.subphases.flatMap(s=>s.items)];
+        const done=items.filter(i=>S['plan_'+i.id]).length,bar=document.getElementById('pbar-'+phaseId);
+        if(bar){bar.style.width=(items.length?done/items.length*100:0)+'%';bar.style.background=ph.color;}
     }
     function updateSkillBar(domId){
         const dom=SKILLS.find(d=>d.id===domId),items=dom.sections.flatMap(s=>s.items);
@@ -598,6 +871,14 @@
             if(nt)nt.value=S['notes_'+i.id]||'';if(lt)lt.value=S['links_'+i.id]||'';
             if(btn)btn.classList.toggle('has-content',!!(S['notes_'+i.id]||S['links_'+i.id]));
         });
+        allPlanItems().forEach(i=>{
+            const el=document.getElementById('pitem-'+i.id);
+            if(!el)return;
+            el.classList.toggle('pdone',!!S['plan_'+i.id]);
+            el.querySelector('.pchk').textContent=S['plan_'+i.id]?'✓':'';
+        });
+        PLAN.forEach(ph=>updatePlanBar(ph.id));
+        updatePlanStats();
     }
 
     // ── GLOBAL ACTIONS ────────────────────────────────────────────────────────────
@@ -633,6 +914,12 @@
         allTasks().forEach(t=>delete S['t_'+t.id]);save();
         document.querySelectorAll('.task').forEach(el=>{el.classList.remove('tdone');el.querySelector('.tchk').textContent='';});
         updateProjectStats();
+    };
+    window.togglePlanItem=function(id,phaseId){
+        S['plan_'+id]=!S['plan_'+id];save();
+        const el=document.getElementById('pitem-'+id);
+        if(el){el.classList.toggle('pdone',!!S['plan_'+id]);el.querySelector('.pchk').textContent=S['plan_'+id]?'✓':'';}
+        updatePlanBar(phaseId);updatePlanStats();
     };
     window.resetSkills=function(){
         if(!confirm('Reset skills progress?'))return;
@@ -727,10 +1014,29 @@
         updateSkillStats();
     }
 
+    function renderPlan(){
+        const root=document.getElementById('plan-root');
+        PLAN.forEach((ph,pi)=>{
+            const div=document.createElement('div');div.className='block';div.id='blk-plan-'+ph.id;
+            const pitemH=items=>items.map(item=>`<div class="pitem${S['plan_'+item.id]?' pdone':''}" id="pitem-${item.id}" onclick="togglePlanItem('${item.id}','${ph.id}')"><div class="pchk">${S['plan_'+item.id]?'✓':''}</div><div class="ptxt">${esc(item.text)}</div></div>`).join('');
+            const theoryH=`<div class="plan-theory-lbl">📚 Theory to study first</div>${pitemH(ph.theory)}`;
+            const implH=ph.subphases.map(sp=>`<div class="plan-impl-lbl">${sp.l}</div>${pitemH(sp.items)}`).join('');
+            const infoH=`<div class="plan-info"><strong>Building:</strong> ${ph.building}<br><strong>Goal:</strong> ${ph.goal}</div>`;
+            div.innerHTML=`<div class="bh" onclick="toggleBlock('plan-${ph.id}')"><span class="bbadge" style="background:${ph.bg};color:${ph.tc}">Phase ${pi+1}</span><span class="btitle">${ph.title}</span><i class="ti ti-chevron-down chev"></i></div><div class="prog-wrap"><div class="prog-bar" id="pbar-${ph.id}" style="width:0%"></div></div><div class="bbody">${infoH}${theoryH}${implH}</div>`;
+            root.appendChild(div);updatePlanBar(ph.id);
+        });
+        const tbl=document.createElement('div');
+        tbl.style.marginTop='1rem';
+        tbl.innerHTML=`<table class="concepts-table"><thead><tr><th>Angular concept</th><th>Introduced in</th></tr></thead><tbody>${CONCEPTS_TABLE.map(r=>`<tr><td>${r.concept}</td><td>${r.phase}</td></tr>`).join('')}</tbody></table>`;
+        root.appendChild(tbl);
+        updatePlanStats();
+    }
+
     renderLearn();
     renderProject();
     renderInterview();
     renderSkills();
+    renderPlan();
     if(document.body.classList.contains('light')) document.getElementById('theme-btn').innerHTML='<i class="ti ti-moon"></i>';
     connect(user);
 </script>
