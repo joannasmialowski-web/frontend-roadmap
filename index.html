@@ -174,13 +174,38 @@
         .time-sec-lbl{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin:14px 0 6px;font-family:var(--mono)}
         .time-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border)}
         .time-row-name{flex:1;font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-        .time-row-input{width:56px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--mono);font-size:12px;padding:3px 5px;text-align:right;outline:none}
+        .time-row-input{width:38px;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--mono);font-size:12px;padding:3px 4px;text-align:right;outline:none}
         .time-row-input:focus{border-color:var(--accent)}
         .time-empty{font-size:11px;color:var(--text3);font-style:italic;padding:4px 0}
         .time-confirm{display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 10px;background:rgba(96,168,255,.08);border:1px solid rgba(96,168,255,.25);border-radius:6px;animation:fadein .15s}
         .time-confirm-lbl{font-size:11px;color:var(--text2);white-space:nowrap}
-        .time-confirm-input{width:62px;background:var(--bg);border:1px solid var(--accent);border-radius:4px;color:var(--text);font-family:var(--mono);font-size:13px;padding:3px 6px;text-align:right;outline:none}
-        .time-confirm-btn{background:var(--accent);color:#fff;border:none;border-radius:4px;padding:4px 12px;cursor:pointer;font-size:12px;font-weight:600}
+        .time-confirm-input{width:46px;background:var(--bg);border:1px solid var(--accent);border-radius:4px;color:var(--text);font-family:var(--mono);font-size:13px;padding:3px 6px;text-align:right;outline:none}
+        .time-unit{font-size:11px;color:var(--text2)}
+        .time-confirm-btn{background:var(--accent);color:#fff;border:none;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:600}
+        .jtopic{border-bottom:1px solid var(--border)}
+        .jtopic:last-of-type{border-bottom:none}
+        .jth{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background .12s}
+        .jth:hover{background:rgba(255,255,255,.02)}
+        .jtnum{font-size:10px;font-family:var(--mono);color:var(--text3);min-width:18px;flex-shrink:0}
+        .jtitle{flex:1;font-size:12px;font-weight:600;color:var(--text)}
+        .jtime{font-size:10px;color:var(--text2);font-family:var(--mono);white-space:nowrap;flex-shrink:0}
+        .jtprog-wrap{width:46px;height:3px;background:var(--bg);border-radius:2px;flex-shrink:0}
+        .jtprog-bar{height:100%;border-radius:2px;transition:width .3s;width:0%}
+        .jchev{font-size:11px;color:var(--text3);transition:transform .2s;flex-shrink:0}
+        .jtopic.jtopen>.jth .jchev{transform:rotate(180deg)}
+        .jtbody{display:none;border-top:1px solid var(--border)}
+        .jtopic.jtopen>.jtbody{display:block}
+        .jtintro{font-size:11px;color:var(--text2);padding:10px 14px;line-height:1.6;border-bottom:1px solid var(--border);font-style:italic}
+        .jitem{border-bottom:1px solid var(--border)}
+        .jitem:last-child{border-bottom:none}
+        .jitem.jidone .jiname{text-decoration:line-through;color:var(--text3)}
+        .jih{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 28px;cursor:pointer;transition:background .12s}
+        .jih:hover{background:rgba(255,255,255,.02)}
+        .jichk{width:16px;height:16px;border:1px solid var(--border2);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--success);cursor:pointer;flex-shrink:0;transition:all .12s}
+        .jitem.jidone .jichk{background:rgba(96,208,144,.15);border-color:var(--success)}
+        .jiname{flex:1;font-size:12px;color:var(--text)}
+        .jibody{padding:10px 14px 12px 52px;border-top:1px solid var(--border)}
+        .jidesc{font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:10px}
         .notes-section{margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
         .notes-ta{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;color:var(--text);font-family:var(--mono);font-size:11px;resize:vertical;min-height:56px;outline:none;line-height:1.5}
         .notes-ta:focus{border-color:var(--border2)}
@@ -353,8 +378,8 @@
         const fid='af-'+bid;
         const tagSel=btype==='concept'?`<div class="add-form-row"><div class="add-form-lbl">Tag</div><select class="add-form-select ci-tag-select"><option value="theory">🧠 theory</option><option value="code">💻 code</option><option value="interview">🎤 interview</option></select></div>`:btype==='skill'?`<div class="add-form-row"><div class="add-form-lbl">Level</div><select class="add-form-select ci-tag-select"><option value="must">🔴 must</option><option value="mid">🟡 mid</option><option value="nice">🟢 nice</option></select></div>`:'';
         const ansF=btype==='quiz'?`<div class="add-form-row"><div class="add-form-lbl">Answer</div><textarea class="add-form-ta ci-answer-input" placeholder="Answer..."></textarea></div>`:'';
-        const conceptF=btype==='concept'?`<div class="add-form-row"><div class="add-form-lbl">Why it matters</div><textarea class="add-form-ta ci-why-input" placeholder="Why is this important?"></textarea></div><div class="add-form-row"><div class="add-form-lbl">Key concepts</div><textarea class="add-form-ta ci-explain-input" placeholder="Key concepts & notes..."></textarea></div><div class="add-form-row"><div class="add-form-lbl">Live coding task</div><textarea class="add-form-ta ci-task-input" placeholder="Practice task..."></textarea></div><div class="add-form-row"><div class="add-form-lbl">Time (h)</div><input class="add-form-input ci-time-input" type="number" min="0" step="0.5" placeholder="e.g. 2"></div>`:'';
-        const ph=btype==='task'?'Task...':btype==='plan'?'Item...':btype==='quiz'?'Question...':btype==='skill'?'Skill name...':'Name...';
+        const conceptF=btype==='concept'?`<div class="add-form-row"><div class="add-form-lbl">Why it matters</div><textarea class="add-form-ta ci-why-input" placeholder="Why is this important?"></textarea></div><div class="add-form-row"><div class="add-form-lbl">Key concepts</div><textarea class="add-form-ta ci-explain-input" placeholder="Key concepts & notes..."></textarea></div><div class="add-form-row"><div class="add-form-lbl">Live coding task</div><textarea class="add-form-ta ci-task-input" placeholder="Practice task..."></textarea></div><div class="add-form-row"><div class="add-form-lbl">Time (h)</div><input class="add-form-input ci-time-input" type="number" min="0" step="0.5" placeholder="e.g. 2"></div>`:btype==='jtopic'?`<div class="add-form-row"><div class="add-form-lbl">Description</div><textarea class="add-form-ta ci-desc-input" placeholder="Short description (optional)..."></textarea></div>`:'';
+        const ph=btype==='task'?'Task...':btype==='plan'?'Item...':btype==='quiz'?'Question...':btype==='skill'?'Skill name...':btype==='jtopic'?'Topic name...':'Name...';
         return `<div id="clist-${bid}"></div><div class="add-row"><button class="add-btn" onclick="toggleAddForm('${fid}')">+ Add item</button><div class="add-form" id="${fid}"><div class="add-form-row"><input class="add-form-input ci-name-input" placeholder="${ph}"></div>${tagSel}${conceptF}${ansF}<div class="add-form-actions"><button class="add-save-btn" onclick="saveCustomItem('${btype}','${bid}')">Save</button><button class="add-cancel-btn" onclick="cancelAdd('${fid}')">Cancel</button></div></div></div>`;
     }
 
@@ -362,6 +387,14 @@
         const items=getCustom(key);container.innerHTML='';
         const entries=Object.entries(items);if(!entries.length)return;
         const lbl=document.createElement('div');lbl.className='custom-lbl';lbl.textContent='✦ My additions';container.appendChild(lbl);
+        if(btype==='jtopic'){
+            entries.forEach(([id,item])=>{
+                const div=document.createElement('div');div.className='jitem'+(item.done?' jidone':'');div.id='jitem-'+id;
+                div.innerHTML=`<div class="jih"><div class="jichk" onclick="toggleCustomDone('${key}','${id}')">${item.done?'✓':''}</div><span class="jiname">${esc(item.name||'')}</span><button class="ci-del" onclick="deleteCustomItem('${key}','${id}')" title="Delete" style="margin-left:auto;font-size:11px">×</button></div><div class="jibody">${item.desc?`<div class="jidesc">${esc(item.desc)}</div>`:''}<div class="notes-section"><div class="notes-lbl">My notes</div><textarea class="notes-ta" placeholder="Write your notes here..." oninput="saveField('notes_${key}_${id}',this.value)">${esc(S['notes_'+key+'_'+id]||'')}</textarea><div class="notes-lbl">My links</div><textarea class="notes-ta" placeholder="Paste useful links..." oninput="saveField('links_${key}_${id}',this.value)" style="min-height:42px">${esc(S['links_'+key+'_'+id]||'')}</textarea></div></div>`;
+                container.appendChild(div);
+            });
+            return;
+        }
         if(btype==='concept'){
             entries.forEach(([id,item])=>{
                 const done=!!item.done;
@@ -398,6 +431,9 @@
             const task=(form.querySelector('.ci-task-input')||{}).value||'';
             const timeVal=parseFloat((form.querySelector('.ci-time-input')||{}).value)||0;
             items[id]={name,tag,why:why.trim(),explain:explain.trim(),task:task.trim(),time:timeVal};
+        } else if(btype==='jtopic'){
+            const desc=(form.querySelector('.ci-desc-input')||{}).value||'';
+            items[id]={name,desc:desc.trim()};
         } else if(btype==='quiz'){
             items[id]={q:name,a:ans};
         } else {
@@ -443,9 +479,12 @@
         if(el)el.textContent='~'+(base+extra)+'h';
     }
 
-    function fmtH(v){ return (v%1===0?v:v.toFixed(1))+'h'; }
+    function fmtH(v){const h=Math.floor(v),m=Math.round((v-h)*60);return h>0&&m>0?h+'h '+m+'min':h>0?h+'h':m>0?m+'min':'0h';}
+    function toHM(v){return{h:Math.floor(v),m:Math.round((Math.floor(v*100)/100%1)*60)};}
     function calcLearnTime(){
-        return SPRINTS.reduce((sum,sp)=>sum+sp.sections.reduce((s2,sec)=>s2+sec.concepts.reduce((s3,c)=>s3+(S['c_'+c.id]?parseFloat(S['time_'+c.id])||0:0),0),0),0);
+        const fromConcepts=SPRINTS.filter(sp=>sp.sections).reduce((sum,sp)=>sum+sp.sections.reduce((s2,sec)=>s2+sec.concepts.reduce((s3,c)=>s3+(S['c_'+c.id]?parseFloat(S['time_'+c.id])||0:0),0),0),0);
+        const fromItems=SPRINTS.filter(sp=>sp.topics).reduce((sum,sp)=>sum+sp.topics.reduce((s2,t)=>s2+t.items.reduce((s3,i)=>s3+(S['ji_'+i.id]?parseFloat(S['time_'+i.id])||0:0),0),0),0);
+        return fromConcepts+fromItems;
     }
     function calcProjectTime(){
         return FEATURES.reduce((sum,f)=>sum+f.tasks.reduce((s,t)=>s+(S['t_'+t.id]?parseFloat(S['time_'+t.id])||0:0),0),0);
@@ -467,7 +506,9 @@
         SPRINTS.forEach(sp=>sp.sections.forEach(sec=>sec.concepts.forEach(c=>{
             if(!S['c_'+c.id])return;anyLearn=true;
             const row=document.createElement('div');row.className='time-row';
-            row.innerHTML=`<div class="time-row-name" title="${esc(c.name)}">${esc(c.name)}</div><input class="time-row-input" type="number" min="0" step="0.5" value="${parseFloat(S['time_'+c.id])||0}" onchange="saveItemTime('${c.id}',this.value)">`;
+            const {h:ch,m:cm}=toHM(parseFloat(S['time_'+c.id])||0);
+            row.innerHTML=`<div class="time-row-name" title="${esc(c.name)}">${esc(c.name)}</div><input class="time-row-input" type="number" min="0" max="99" value="${ch}" onchange="saveItemTimeHM('${c.id}',this.value,document.getElementById('trm-${c.id}').value)"><span class="time-unit">h</span><input class="time-row-input" id="trm-${c.id}" type="number" min="0" max="59" value="${cm}" onchange="saveItemTimeHM('${c.id}',document.getElementById('trh-${c.id}').value,this.value)"><span class="time-unit">min</span>`;
+            row.querySelector('input').id='trh-'+c.id;
             learnList.appendChild(row);
         })));
         if(!anyLearn){const e=document.createElement('div');e.className='time-empty';e.textContent='Brak ukończonych tematów';learnList.appendChild(e);}
@@ -476,13 +517,14 @@
         FEATURES.forEach(f=>f.tasks.forEach(t=>{
             if(!S['t_'+t.id])return;anyProj=true;
             const row=document.createElement('div');row.className='time-row';
-            row.innerHTML=`<div class="time-row-name" title="${esc(t.txt)}">${esc(t.txt)}</div><input class="time-row-input" type="number" min="0" step="0.5" value="${parseFloat(S['time_'+t.id])||0}" onchange="saveItemTime('${t.id}',this.value)">`;
+            const {h:th,m:tm}=toHM(parseFloat(S['time_'+t.id])||0);
+            row.innerHTML=`<div class="time-row-name" title="${esc(t.txt)}">${esc(t.txt)}</div><input class="time-row-input" id="trh-${t.id}" type="number" min="0" max="99" value="${th}" onchange="saveItemTimeHM('${t.id}',this.value,document.getElementById('trm-${t.id}').value)"><span class="time-unit">h</span><input class="time-row-input" id="trm-${t.id}" type="number" min="0" max="59" value="${tm}" onchange="saveItemTimeHM('${t.id}',document.getElementById('trh-${t.id}').value,this.value)"><span class="time-unit">min</span>`;
             projectList.appendChild(row);
         }));
         if(!anyProj){const e=document.createElement('div');e.className='time-empty';e.textContent='Brak ukończonych zadań';projectList.appendChild(e);}
     }
-    window.saveItemTime=function(id,val){
-        S['time_'+id]=parseFloat(val)||0;save();updateTimeTiles();
+    window.saveItemTimeHM=function(id,hVal,mVal){
+        S['time_'+id]=(parseFloat(hVal)||0)+(parseFloat(mVal)||0)/60;save();updateTimeTiles();
     };
     window.toggleTimePanel=function(){
         document.getElementById('time-panel').classList.toggle('open');
@@ -501,20 +543,61 @@
     // ── DATA ─────────────────────────────────────────────────────────────────────
 
     const SPRINTS=[
-        {id:'sp1',title:'JS Fundamentals for interviews',time:'~20h',color:'#f0a040',bg:'rgba(240,160,64,.15)',tc:'#f0a040',sections:[
-                {l:'OOP & Prototypes',concepts:[
-                        {id:'c1',tag:'theory',time:2,name:'The new keyword — what it actually does',why:'Classic question: "what happens when you call new?"',explain:'1) Creates empty {}. 2) Sets __proto__ to Fn.prototype. 3) Calls Fn with this = that object. 4) Returns the object — unless Fn returns another object. Without new in strict mode: this = undefined.',task:'Implement myNew(Fn, ...args) that behaves identically to new.'},
-                        {id:'c2',tag:'theory',time:2,name:'prototype vs __proto__',why:'Asked at every level — junior through senior',explain:'prototype: property on functions — becomes the __proto__ of instances. __proto__: link from instance to its prototype. Chain: instance → Class.prototype → Object.prototype → null.',task:'Log the full prototype chain: class Animal{}; class Dog extends Animal{}; const d = new Dog().'},
-                        {id:'c3',tag:'code',time:2.5,name:'ES6 class — under the hood',why:'"Are classes real classes?" — common senior question',explain:'class is syntax sugar over function constructor + prototype. typeof class Foo{} === "function". Differences: cannot call without new, always strict, methods non-enumerable, no hoisting.',task:'Rewrite an ES6 class with extends using plain prototype — no class keyword.'},
-                        {id:'c4',tag:'theory',time:2.5,name:'Closures & lexical environment',why:'Asked on every JS interview without exception',explain:'Closure = function + persistent reference to its lexical environment at definition time. Env Record (variables) + outer reference (parent scope). Lookup: local → outer → global → ReferenceError.',task:'Write makeCounter() returning {inc, dec, get} with private state unreachable from outside.'},
-                        {id:'c5',tag:'interview',time:3,name:'this — 4 rules + arrow functions',why:'Most common JS question at mid/senior level',explain:'1) Method: this = object before dot. 2) Function strict: undefined. 3) Function non-strict: global. 4) Arrow: lexical this from enclosing scope, no own this. 5) new: this = new object. call/apply/bind override rules 1–2.',task:'What does this print: const obj={name:"X",f:()=>console.log(this?.name)}; obj.f() — and why?'},
-                    ]},
-                {l:'Functional Patterns',concepts:[
-                        {id:'c6',tag:'theory',time:3,name:'Currying & partial application',why:'FP foundation — asked at mid/senior level',explain:'Currying: f(a,b,c) → f(a)(b)(c). Partial: bind(null,arg1) fixes N args at once. Difference: curry always produces unary functions; partial fixes any number. Used in compose/pipe.',task:'Write curry(fn) that works for any function length. Verify: curry(add)(1)(2) === 3.'},
-                        {id:'c7',tag:'code',time:2.5,name:'Memoization + the object argument problem',why:'Performance — discussed in every optimization conversation',explain:'Cache results via closure. Problem: objects compared by reference. JSON.stringify as key — pitfalls: undefined, Date, circular refs, key order. Fix: sort keys before stringify, or WeakMap.',task:'Write memoize(fn) that handles {a:1,b:2} vs {b:2,a:1} as equivalent (sorted keys).'},
-                        {id:'c8',tag:'theory',time:2.5,name:'Recursion — risks, benefits, alternatives',why:'Algorithms, DOM trees, deep clone operations',explain:'Risk: stack overflow (~10–15k calls). Use for: trees, graphs, divide & conquer. Trampolining: return a thunk instead of calling recursively — outer loop executes thunks without growing the stack.',task:'Write deepClone(obj) recursively. Then iteratively with explicit stack. Compare.'},
-                    ]},
+        {id:'sp1',title:'JS Fundamentals for interviews',time:'~30h',color:'#f0a040',bg:'rgba(240,160,64,.15)',tc:'#f0a040',topics:[
+            {id:'jt1',title:'Memory, Data Types, and Cloning',time:'2–3h',intro:'Understanding how data is stored is fundamental for high-performance coding.',items:[
+                {id:'ji11',name:'Stack vs. Heap',desc:'Primitive types (Number, Boolean, etc.) are generally stored on the stack (fast access, fixed size), while objects and arrays reside on the heap (dynamic size, accessed via pointers).'},
+                {id:'ji12',name:'Autoboxing',desc:'The engine temporarily wraps a primitive (like a string) in an object to allow method calls (e.g., .toUpperCase()) before discarding it.'},
+                {id:'ji13',name:'Object Cloning',desc:'Shallow copy (spread operator ..., Object.assign) copies only the first level of properties. Deep copy recursively copies nested structures. Use structuredClone() for a modern native solution that handles circular references.'},
+                {id:'ji14',name:'Type Coercion',desc:'Understand the ToPrimitive conversion process and how operands are implicitly converted in loose comparisons (e.g., [] == false).'},
             ]},
+            {id:'jt2',title:'The this Keyword and Context Binding',time:'3–4h',intro:'The value of this is determined dynamically at runtime based on how a function is invoked.',items:[
+                {id:'ji21',name:'New Binding',desc:'this refers to the new instance created by the new operator.'},
+                {id:'ji22',name:'Explicit Binding',desc:'Set manually using .call(), .apply(), or .bind().'},
+                {id:'ji23',name:'Implicit Binding',desc:'this refers to the object to the left of the dot in a method call (e.g., obj.method()).'},
+                {id:'ji24',name:'Default Binding',desc:'In standalone calls, this is the global object (window) or undefined in strict mode.'},
+                {id:'ji25',name:'Arrow Functions',desc:'Do not have their own this binding; they inherit it lexically from their surrounding scope at the time of creation.'},
+            ]},
+            {id:'jt3',title:'Execution Context, Closures, and Scope',time:'4–5h',intro:'Core mechanics behind how JavaScript executes code and manages variable access.',items:[
+                {id:'ji31',name:'Execution Context',desc:'Consists of the Variable Environment, Lexical Environment, and this binding. Each function call creates a new execution context pushed onto the call stack.'},
+                {id:'ji32',name:'Closure',desc:'A function that "remembers" its lexical scope even when executing outside of it. Enables data encapsulation and private state.'},
+                {id:'ji33',name:'Memory Leaks via Closures',desc:'The "Shared Lexical Environment" problem: unused closures can prevent large objects from being garbage collected if they share a scope with a live closure.'},
+                {id:'ji34',name:'Hoisting',desc:'Variable (var) and function declarations are moved to the top of their scope during compilation. let and const are hoisted but remain in the Temporal Dead Zone (TDZ) until initialized.'},
+            ]},
+            {id:'jt4',title:'Prototypes and ES6 Classes Under the Hood',time:'4–6h',intro:'ES6 classes are syntactic sugar over JavaScript\'s prototypal inheritance.',items:[
+                {id:'ji41',name:'prototype vs. __proto__',desc:'prototype is a property on constructors used as a blueprint; __proto__ (or [[Prototype]]) is the active link on an instance used for property lookups up the chain.'},
+                {id:'ji42',name:'Mechanics of new',desc:'1. Create an empty object. 2. Link its [[Prototype]] to the constructor\'s prototype. 3. Bind this to the new object. 4. Execute the constructor. 5. Return the object (or the explicit return value if it\'s an object).'},
+                {id:'ji43',name:'ES6 Subclassing',desc:'Unlike ES5, ES6 uses base-first allocation: super() must be called in the child constructor before accessing this, because the parent class is responsible for allocating the instance.'},
+            ]},
+            {id:'jt5',title:'Asynchronous JavaScript and the Event Loop',time:'5–7h',intro:'The Event Loop manages execution by coordinating the Call Stack, Microtask Queue, and Macrotask Queue.',items:[
+                {id:'ji51',name:'Event Loop mechanics',desc:'Monitors the Call Stack. When empty, pulls tasks from the Microtask Queue (Promises, queueMicrotask, await) first, then from the Macrotask Queue (setTimeout, setInterval, I/O).'},
+                {id:'ji52',name:'Microtasks vs. Macrotasks',desc:'Microtasks are always fully cleared before the next macrotask begins. A microtask that queues another microtask will be processed in the same cycle — this can starve macrotasks.'},
+                {id:'ji53',name:'Async/Await',desc:'await pauses the async function and returns control to the event loop without blocking the main thread. The resumed function is scheduled as a microtask when the awaited promise settles.'},
+                {id:'ji54',name:'AbortController',desc:'A modern API to cancel ongoing fetch requests or other async tasks. Pass the signal to fetch(); call controller.abort() to cancel. The promise rejects with an AbortError.'},
+            ]},
+            {id:'jt6',title:'Data Structures and V8 Optimizations',time:'3–4h',intro:'Writing code that the engine can optimize is key to performance.',items:[
+                {id:'ji61',name:'V8 Elements Kinds',desc:'The engine tracks array element types (SMI → DOUBLE → ELEMENTS). Downgrading (e.g., adding a float to an integer array) is permanent — the array never re-optimizes.'},
+                {id:'ji62',name:'Packed vs. Holey Arrays',desc:'Arrays with "holes" (e.g., after delete or sparse initialization) are significantly slower because lookups must check the prototype chain for each missing index.'},
+                {id:'ji63',name:'Map/Set vs. Objects/Arrays',desc:'Map and Set guarantee O(1) lookup and deletion. Plain objects can degrade for non-string keys; arrays require O(N) scans for indexOf/includes.'},
+                {id:'ji64',name:'WeakMap / WeakSet',desc:'Hold weak references to object keys, allowing Garbage Collection. Use to associate metadata with objects (e.g., DOM nodes) without creating memory leaks.'},
+            ]},
+            {id:'jt7',title:'Advanced Functional Patterns',time:'4–5h',intro:'Functional techniques used in production code and senior-level interviews.',items:[
+                {id:'ji71',name:'Memoization',desc:'Caching the results of pure function calls using closures. A memoized function returns the cached result for the same arguments without re-executing the function body.'},
+                {id:'ji72',name:'Currying and Partial Application',desc:'Currying transforms f(a,b,c) into f(a)(b)(c) — a sequence of unary functions. Partial application fixes some arguments upfront using .bind() or a wrapper.'},
+                {id:'ji73',name:'Recursion and Stack Safety',desc:'Deep recursion causes RangeError: Maximum call stack size exceeded. Proper Tail Calls (PTC) are in the ES6 spec but only supported in Safari in strict mode.'},
+                {id:'ji74',name:'Trampolining',desc:'A pattern to simulate deep recursion safely. Each step returns a thunk (a function) instead of calling itself directly. An outer loop calls successive thunks — the stack stays flat.'},
+            ]},
+            {id:'jt8',title:'DOM and Events',time:'3–4h',intro:'Understanding how events propagate through the DOM is essential for delegation and performance.',items:[
+                {id:'ji81',name:'Event Flow',desc:'Three phases: Capturing (event travels down from window to target), Target (event reaches the element), Bubbling (event travels back up to window). addEventListener third argument controls phase.'},
+                {id:'ji82',name:'Event Delegation',desc:'Attach one listener to a parent element instead of many listeners to children. Uses bubbling to catch events from dynamically added children. Reduces memory usage.'},
+                {id:'ji83',name:'mouseenter vs. mouseover',desc:'mouseenter does not bubble — fires only when the pointer enters the element itself. mouseover bubbles — fires when entering the element or any of its descendants.'},
+            ]},
+            {id:'jt9',title:'Browser APIs and Tooling',time:'2–3h',intro:'Practical browser knowledge expected at mid-level and above.',items:[
+                {id:'ji91',name:'Storage comparison',desc:'Cookies: 4KB, sent to server on every request, can be HttpOnly. localStorage: 5MB, persistent, synchronous. sessionStorage: 5MB, tab-scoped, cleared on close.'},
+                {id:'ji92',name:'Strict Mode',desc:'\'use strict\' prevents accidental globals, disallows duplicate parameter names, changes this to undefined in plain function calls, and makes eval safer.'},
+                {id:'ji93',name:'Script Loading',desc:'async: downloads in parallel, executes immediately when ready — order not guaranteed. defer: downloads in parallel, executes after DOM is fully parsed — order preserved.'},
+                {id:'ji94',name:'Transpilation',desc:'Babel converts ES6+ syntax (classes, arrow functions, optional chaining) into ES5-compatible code. Polyfills (core-js) add missing runtime APIs. Tree-shaking removes unused exports.'},
+            ]},
+        ]},
         {id:'sp2',title:'TypeScript — mid/senior level',time:'~14h',color:'#a080f0',bg:'rgba(160,128,240,.15)',tc:'#a080f0',sections:[
                 {l:'Advanced Types',concepts:[
                         {id:'c9',tag:'theory',time:2.5,name:'Generics — constraints & infer',why:'Every mid+ TS interview asks about generics in practice',explain:'Constraints: <T extends object>. infer extracts a type inside conditional: ReturnType<T> = T extends (...args:any)=>infer R ? R : never. Used in UnwrapPromise, ExtractArrayElement, etc.',task:'Write UnwrapPromise<T> that extracts the resolved type from Promise<T>.'},
@@ -1007,20 +1090,36 @@
 
     // ── UI HELPERS ────────────────────────────────────────────────────────────────
 
-    function allConcepts(){ return SPRINTS.flatMap(s=>s.sections.flatMap(sec=>sec.concepts)); }
+    function allConcepts(){ return SPRINTS.filter(s=>s.sections).flatMap(s=>s.sections.flatMap(sec=>sec.concepts)); }
+    function allJItems(){ return SPRINTS.filter(s=>s.topics).flatMap(s=>s.topics.flatMap(t=>t.items)); }
     function allTasks(){    return FEATURES.flatMap(f=>f.tasks); }
     function allItems(){    return SKILLS.flatMap(d=>d.sections.flatMap(s=>s.items)); }
     function allPlanItems(){ return PLAN.flatMap(ph=>[...ph.theory,...ph.subphases.flatMap(s=>s.items)]); }
 
     function updateLearnStats(){
-        const all=allConcepts(),done=all.filter(c=>S['c_'+c.id]).length;
+        const concepts=allConcepts(),jitems=allJItems();
+        const done=concepts.filter(c=>S['c_'+c.id]).length+jitems.filter(i=>S['ji_'+i.id]).length;
+        const total=concepts.length+jitems.length;
         document.getElementById('ld').textContent=done;
-        document.getElementById('lt').textContent=all.length;
-        document.getElementById('lp').textContent=Math.round(done/all.length*100)+'%';
+        document.getElementById('lt').textContent=total;
+        document.getElementById('lp').textContent=(total?Math.round(done/total*100):0)+'%';
     }
     function updateSprintBar(sid){
-        const sp=SPRINTS.find(s=>s.id===sid),all=sp.sections.flatMap(s=>s.concepts);
-        const done=all.filter(c=>S['c_'+c.id]).length,bar=document.getElementById('bar-'+sid);
+        const sp=SPRINTS.find(s=>s.id===sid);if(!sp)return;
+        const bar=document.getElementById('bar-'+sid);
+        if(sp.topics){
+            const items=sp.topics.flatMap(t=>t.items);
+            const done=items.filter(i=>S['ji_'+i.id]).length;
+            if(bar){bar.style.width=(items.length?done/items.length*100:0)+'%';bar.style.background=sp.color;}
+            sp.topics.forEach(t=>{
+                const tdone=t.items.filter(i=>S['ji_'+i.id]).length;
+                const tbar=document.getElementById('jtbar-'+t.id);
+                if(tbar)tbar.style.width=(t.items.length?tdone/t.items.length*100:0)+'%';
+            });
+            return;
+        }
+        const all=sp.sections.flatMap(s=>s.concepts);
+        const done=all.filter(c=>S['c_'+c.id]).length;
         if(bar){bar.style.width=(all.length?done/all.length*100:0)+'%';bar.style.background=sp.color;}
     }
     function updateProjectStats(){
@@ -1059,6 +1158,13 @@
             el.classList.toggle('cdone',!!S['c_'+c.id]);
             const btn=document.getElementById('dbtn-'+c.id);
             if(btn)btn.textContent=S['c_'+c.id]?'✓ Done':'Mark as done';
+        });
+        allJItems().forEach(i=>{
+            const el=document.getElementById('jitem-'+i.id);if(!el)return;
+            el.classList.toggle('jidone',!!S['ji_'+i.id]);
+            const chk=el.querySelector('.jichk');if(chk)chk.textContent=S['ji_'+i.id]?'✓':'';
+            const nt=document.getElementById('ntxt-'+i.id),lt=document.getElementById('ltxt-'+i.id);
+            if(nt)nt.value=S['notes_'+i.id]||'';if(lt)lt.value=S['links_'+i.id]||'';
         });
         SPRINTS.forEach(s=>updateSprintBar(s.id));
         updateLearnStats();
@@ -1101,7 +1207,7 @@
         });
         PLAN.forEach(ph=>updatePlanBar(ph.id));
         updatePlanStats();
-        SPRINTS.forEach(sp=>{ const c=document.getElementById('clist-'+sp.id);if(c)renderCustomList('concept_'+sp.id,c,'concept');updateSprintTime(sp.id); });
+        SPRINTS.forEach(sp=>{ const c=document.getElementById('clist-'+sp.id);if(c)renderCustomList(sp.topics?'jtopic_'+sp.id:'concept_'+sp.id,c,sp.topics?'jtopic':'concept');updateSprintTime(sp.id); });
         FEATURES.forEach(f=>{ const c=document.getElementById('clist-'+f.id);if(c)renderCustomList('task_'+f.id,c,'task'); });
         PLAN.forEach(ph=>{ const c=document.getElementById('clist-'+ph.id);if(c)renderCustomList('plan_'+ph.id,c,'plan'); });
         QUESTIONS.forEach((cat,i)=>{ const c=document.getElementById('clist-qi'+i);if(c)renderCustomList('quiz_qi'+i,c,'quiz'); });
@@ -1125,19 +1231,49 @@
             const c=sp?.sections.flatMap(s=>s.concepts).find(c=>c.id===id);
             const est=c?.time||0;
             S['time_'+id]=est;save();
+            const {h:eh,m:em}=toHM(est);
             const tc=document.createElement('div');tc.className='time-confirm';tc.id='tc-'+id;
-            tc.innerHTML=`<span class="time-confirm-lbl">Czas nauki (h):</span><input class="time-confirm-input" id="tci-${id}" type="number" min="0" step="0.5" value="${est}"><button class="time-confirm-btn" onclick="confirmConceptTime('${id}','${sid}')">✓ Ok</button>`;
+            tc.innerHTML=`<span class="time-confirm-lbl">Czas:</span><input class="time-confirm-input" id="tch-${id}" type="number" min="0" max="99" value="${eh}"><span class="time-unit">h</span><input class="time-confirm-input" id="tcm-${id}" type="number" min="0" max="59" value="${em}"><span class="time-unit">min</span><button class="time-confirm-btn" onclick="confirmConceptTime('${id}','${sid}')">✓</button>`;
             if(btn)btn.insertAdjacentElement('afterend',tc);
-            const inp=document.getElementById('tci-'+id);if(inp){inp.focus();inp.select();}
-            inp?.addEventListener('keydown',e=>{if(e.key==='Enter')confirmConceptTime(id,sid);});
+            const inp=document.getElementById('tch-'+id);if(inp){inp.focus();inp.select();}
+            [document.getElementById('tch-'+id),document.getElementById('tcm-'+id)].forEach(i=>i?.addEventListener('keydown',e=>{if(e.key==='Enter')confirmConceptTime(id,sid);}));
         } else {
             delete S['time_'+id];save();
         }
         updateTimeTiles();updateLearnStats();updateSprintBar(sid);
     };
+    window.toggleTopic=function(tid){document.getElementById('jtopic-'+tid).classList.toggle('jtopen');};
+    window.toggleJItem=function(iid){document.getElementById('jitem-'+iid).classList.toggle('jiopen');};
+    window.markJItemDone=function(iid,tid,spid){
+        S['ji_'+iid]=!S['ji_'+iid];save();
+        const el=document.getElementById('jitem-'+iid);if(!el)return;
+        el.classList.toggle('jidone',!!S['ji_'+iid]);
+        const chk=el.querySelector('.jichk');if(chk)chk.textContent=S['ji_'+iid]?'✓':'';
+        const existing=document.getElementById('jtc-'+iid);if(existing)existing.remove();
+        if(S['ji_'+iid]){
+            const body=el.querySelector('.jibody');
+            if(body){
+                const tc=document.createElement('div');tc.className='time-confirm';tc.id='jtc-'+iid;
+                tc.innerHTML=`<span class="time-confirm-lbl">Czas:</span><input class="time-confirm-input" id="jtch-${iid}" type="number" min="0" max="99" value="0"><span class="time-unit">h</span><input class="time-confirm-input" id="jtcm-${iid}" type="number" min="0" max="59" value="0"><span class="time-unit">min</span><button class="time-confirm-btn" onclick="confirmJItemTime('${iid}','${spid}')">✓</button>`;
+                body.appendChild(tc);
+                const inp=document.getElementById('jtch-'+iid);if(inp){inp.focus();inp.select();}
+                [document.getElementById('jtch-'+iid),document.getElementById('jtcm-'+iid)].forEach(i=>i?.addEventListener('keydown',e=>{if(e.key==='Enter')confirmJItemTime(iid,spid);}));
+            }
+            S['time_'+iid]=0;save();
+        } else { delete S['time_'+iid];save(); }
+        updateTimeTiles();updateSprintBar(spid);updateLearnStats();
+    };
+    window.confirmJItemTime=function(iid,spid){
+        const h=parseFloat(document.getElementById('jtch-'+iid)?.value)||0;
+        const m=parseFloat(document.getElementById('jtcm-'+iid)?.value)||0;
+        S['time_'+iid]=h+m/60;save();
+        updateTimeTiles();
+        const tc=document.getElementById('jtc-'+iid);if(tc)tc.remove();
+    };
     window.confirmConceptTime=function(id,sid){
-        const inp=document.getElementById('tci-'+id);
-        S['time_'+id]=parseFloat(inp?.value)||0;save();
+        const h=parseFloat(document.getElementById('tch-'+id)?.value)||0;
+        const m=parseFloat(document.getElementById('tcm-'+id)?.value)||0;
+        S['time_'+id]=h+m/60;save();
         updateTimeTiles();
         const tc=document.getElementById('tc-'+id);if(tc)tc.remove();
     };
@@ -1155,9 +1291,12 @@
     };
     window.resetLearn=function(){
         if(!confirm('Reset learning progress?'))return;
-        allConcepts().forEach(c=>delete S['c_'+c.id]);save();
+        allConcepts().forEach(c=>delete S['c_'+c.id]);
+        allJItems().forEach(i=>{delete S['ji_'+i.id];delete S['time_'+i.id];});
+        save();
         document.querySelectorAll('.concept').forEach(el=>el.classList.remove('cdone','copen'));
-        SPRINTS.forEach(s=>updateSprintBar(s.id));updateLearnStats();
+        document.querySelectorAll('.jitem').forEach(el=>el.classList.remove('jidone','jiopen'));
+        SPRINTS.forEach(s=>updateSprintBar(s.id));updateLearnStats();updateTimeTiles();
     };
     window.resetProject=function(){
         if(!confirm('Reset project progress?'))return;
@@ -1196,7 +1335,37 @@
         const root=document.getElementById('sprints-root');
         SPRINTS.forEach((sp,si)=>{
             const div=document.createElement('div');div.className='block'+(si===0?' open':'');div.id='blk-'+sp.id;
-            const sH=sp.sections.map(sec=>`
+            let bodyHTML;
+            if(sp.topics){
+                bodyHTML=sp.topics.map((t,ti)=>`<div class="jtopic" id="jtopic-${t.id}">
+  <div class="jth" onclick="toggleTopic('${t.id}')">
+    <span class="jtnum">${ti+1}.</span>
+    <span class="jtitle">${t.title}</span>
+    <span class="jtime">${t.time}</span>
+    <div class="jtprog-wrap"><div class="jtprog-bar" id="jtbar-${t.id}" style="background:${sp.color}"></div></div>
+    <i class="ti ti-chevron-down jchev"></i>
+  </div>
+  <div class="jtbody">
+    <div class="jtintro">${t.intro}</div>
+    ${t.items.map(i=>`<div class="jitem${S['ji_'+i.id]?' jidone':''}" id="jitem-${i.id}">
+      <div class="jih">
+        <div class="jichk" onclick="markJItemDone('${i.id}','${t.id}','${sp.id}')">${S['ji_'+i.id]?'✓':''}</div>
+        <span class="jiname">${i.name}</span>
+      </div>
+      <div class="jibody">
+        <div class="jidesc">${i.desc}</div>
+        <div class="notes-section">
+          <div class="notes-lbl">My notes</div>
+          <textarea class="notes-ta" id="ntxt-${i.id}" placeholder="Write your notes here..." oninput="saveField('notes_${i.id}',this.value)"></textarea>
+          <div class="notes-lbl">My links</div>
+          <textarea class="notes-ta" id="ltxt-${i.id}" placeholder="Paste useful links (one per line)..." oninput="saveField('links_${i.id}',this.value)" style="min-height:42px"></textarea>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>
+</div>`).join('');
+            } else {
+                bodyHTML=sp.sections.map(sec=>`
       <div class="sec-lbl">${sec.l}</div>
       ${sec.concepts.map(c=>`
         <div class="concept${S['c_'+c.id]?' cdone':''}" id="concept-${c.id}">
@@ -1218,7 +1387,9 @@
             <button class="done-btn" id="dbtn-${c.id}" onclick="markDone('${c.id}','${sp.id}')">${S['c_'+c.id]?'✓ Done':'Mark as done'}</button>
           </div>
         </div>`).join('')}`).join('');
-            div.innerHTML=`<div class="bh" onclick="toggleBlock('${sp.id}')"><span class="bbadge" style="background:${sp.bg};color:${sp.tc}">${sp.title.split(' ')[0]}</span><span class="btitle">${sp.title}</span><span class="bmeta" id="bmeta-${sp.id}">${sp.time}</span><i class="ti ti-chevron-down chev"></i></div><div class="prog-wrap"><div class="prog-bar" id="bar-${sp.id}" style="width:0%"></div></div><div class="bbody">${sH}${addFormHTML('concept',sp.id)}</div>`;
+            }
+            const customForm=addFormHTML(sp.topics?'jtopic':'concept',sp.id);
+            div.innerHTML=`<div class="bh" onclick="toggleBlock('${sp.id}')"><span class="bbadge" style="background:${sp.bg};color:${sp.tc}">${sp.title.split(' ')[0]}</span><span class="btitle">${sp.title}</span><span class="bmeta" id="bmeta-${sp.id}">${sp.time}</span><i class="ti ti-chevron-down chev"></i></div><div class="prog-wrap"><div class="prog-bar" id="bar-${sp.id}" style="width:0%"></div></div><div class="bbody">${bodyHTML}${customForm}</div>`;
             root.appendChild(div);updateSprintBar(sp.id);
         });
         updateLearnStats();
