@@ -164,9 +164,9 @@
         .time-panel-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--border)}
         .time-panel-title{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
         .time-panel-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;line-height:1;padding:2px}
-        .time-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px}
+        .time-tiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:14px}
         .time-tile{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px 10px;text-align:center}
-        .time-tile-total{grid-column:1/-1;background:rgba(96,168,255,.1);border-color:rgba(96,168,255,.3)}
+        .time-tile-total{grid-column:1/-1;background:var(--bg);border-color:rgba(96,168,255,.6)}
         .time-tile-val{font-size:22px;font-weight:700;font-family:var(--mono);color:var(--accent)}
         .time-tile-total .time-tile-val{color:#60a8ff}
         .time-tile-lbl{font-size:10px;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:.04em}
@@ -212,6 +212,7 @@
         .notes-ta::placeholder{color:var(--text3)}
         .notes-lbl{font-size:9px;font-weight:600;letter-spacing:.07em;color:var(--text3);margin-bottom:4px;margin-top:8px;font-family:var(--mono);text-transform:uppercase}
         .notes-lbl:first-child{margin-top:0}
+
         .notes-toggle{font-size:10px;padding:1px 7px;border-radius:6px;border:1px solid var(--border);background:none;cursor:pointer;color:var(--text3);font-family:var(--mono);transition:all .12s;flex-shrink:0}
         .notes-toggle:hover{color:var(--text2);border-color:var(--border2)}
         .notes-toggle.has-content{color:var(--accent2);border-color:rgba(96,208,240,.3);background:rgba(96,208,240,.06)}
@@ -256,6 +257,37 @@
         .pitem.pdone .ptxt{text-decoration:line-through;color:var(--text2)}
         .pchk{width:16px;height:16px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:1px}
         .ptxt{font-size:12px;font-weight:500;line-height:1.4;font-family:var(--mono)}
+        .planner-add{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:1.25rem}
+        .planner-add-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+        .planner-field{display:flex;flex-direction:column;gap:4px}
+        .planner-field-lbl{font-size:9px;font-weight:600;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;font-family:var(--mono)}
+        .planner-input{background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font);font-size:13px;padding:5px 10px;outline:none;transition:border .12s}
+        .planner-input:focus{border-color:var(--border2)}
+        .planner-input.wide{width:240px}
+        .planner-time-inp{width:52px;text-align:right}
+        .planner-save-btn{background:var(--accent);color:#0f0f11;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap;align-self:flex-end}
+        .planner-task{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;transition:opacity .15s}
+        .planner-task.ptdone{opacity:.45}
+        .pt-chk{width:18px;height:18px;border-radius:4px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:10px;font-weight:700;transition:all .12s}
+        .planner-task.ptdone .pt-chk{background:var(--success);border-color:var(--success);color:#0f0f11}
+        .pt-name{flex:1;font-size:13px;font-weight:500}
+        .planner-task.ptdone .pt-name{text-decoration:line-through;color:var(--text2)}
+        .pt-badge{font-size:10px;color:var(--text3);font-family:var(--mono);white-space:nowrap;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 7px}
+        .pt-badge.actual{color:var(--success);border-color:rgba(96,208,144,.25);background:rgba(96,208,144,.08)}
+        .pt-del{background:none;border:none;color:var(--text3);cursor:pointer;font-size:15px;padding:0 2px;line-height:1;transition:color .12s}
+        .pt-del:hover{color:var(--danger)}
+        .pt-edit{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:0 4px;line-height:1;transition:color .12s;font-family:var(--mono)}
+        .pt-edit:hover{color:var(--text2)}
+        .pt-edit-row{display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap}
+        .pt-edit-inp{background:var(--bg3);border:1px solid var(--accent);border-radius:5px;color:var(--text);font-family:var(--font);font-size:13px;padding:3px 8px;outline:none;flex:1;min-width:120px}
+        .pt-edit-save{background:var(--accent);color:#0f0f11;border:none;border-radius:5px;padding:3px 10px;cursor:pointer;font-size:11px;font-weight:600}
+        .pt-edit-cancel{background:none;border:1px solid var(--border);border-radius:5px;padding:3px 10px;cursor:pointer;font-size:11px;color:var(--text2)}
+        .planner-empty{color:var(--text3);font-size:12px;text-align:center;padding:2rem 0;font-family:var(--mono)}
+        .planner-day{margin-bottom:1.25rem}
+        .planner-day-hdr{display:flex;align-items:baseline;gap:10px;padding:6px 0 8px;border-bottom:1px solid var(--border);margin-bottom:8px}
+        .planner-day-label{font-size:12px;font-weight:600;color:var(--text)}
+        .planner-day-date{font-size:11px;color:var(--text3);font-family:var(--mono)}
+        .planner-day-summary{margin-left:auto;font-size:11px;font-family:var(--mono);color:var(--text2)}
         .concepts-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:1.5rem}
         .concepts-table th{text-align:left;font-size:9px;font-weight:600;letter-spacing:.07em;color:var(--text3);text-transform:uppercase;font-family:var(--mono);padding:6px 10px;border-bottom:1px solid var(--border)}
         .concepts-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text2)}
@@ -289,6 +321,7 @@
     <button class="tab" onclick="showTab('project')">🛠 Project</button>
     <button class="tab" onclick="showTab('interview')">🎤 Interview</button>
     <button class="tab" onclick="showTab('skills')">✅ Skills</button>
+    <button class="tab" onclick="showTab('planner')">📅 Planner</button>
 </div>
 
 <div class="main">
@@ -327,6 +360,33 @@
         <div class="filter-row" id="skill-filters"></div>
         <div class="toolbar"><button class="reset-btn" onclick="resetSkills()">↺ reset</button></div>
         <div id="skills-root"></div>
+    </div>
+    <div class="view" id="tab-planner">
+        <div class="stats">
+            <div class="stat"><div class="stat-num" id="pl-done">0</div><div class="stat-lbl">done</div></div>
+            <div class="stat"><div class="stat-num" id="pl-total">0</div><div class="stat-lbl">total</div></div>
+            <div class="stat"><div class="stat-num" id="pl-est">0h</div><div class="stat-lbl">estimated</div></div>
+            <div class="stat"><div class="stat-num" id="pl-actual">0h</div><div class="stat-lbl">actual</div></div>
+        </div>
+        <div class="planner-add">
+            <div class="planner-add-row">
+                <div class="planner-field" style="flex:1;min-width:180px">
+                    <div class="planner-field-lbl">Task</div>
+                    <input class="planner-input wide" id="pt-name-inp" placeholder="What do you want to do?" style="width:100%">
+                </div>
+                <div class="planner-field">
+                    <div class="planner-field-lbl">Est. time</div>
+                    <div style="display:flex;align-items:center;gap:4px">
+                        <input class="planner-input planner-time-inp" id="pt-esth-inp" type="number" min="0" max="99" value="0" placeholder="0">
+                        <span style="font-size:11px;color:var(--text3)">h</span>
+                        <input class="planner-input planner-time-inp" id="pt-estm-inp" type="number" min="0" max="59" value="0" placeholder="0">
+                        <span style="font-size:11px;color:var(--text3)">min</span>
+                    </div>
+                </div>
+                <button class="planner-save-btn" onclick="addPlannerTask()">+ Add</button>
+            </div>
+        </div>
+        <div id="planner-root"></div>
     </div>
 </div>
 
@@ -368,6 +428,7 @@
     }
 
     function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
     window.saveField=function(key,val){ if(val)S[key]=val; else delete S[key]; save(); };
     window.toggleNotes=function(id){ document.getElementById('np-'+id).classList.toggle('open'); };
 
@@ -489,13 +550,17 @@
     function calcProjectTime(){
         return FEATURES.reduce((sum,f)=>sum+f.tasks.reduce((s,t)=>s+(S['t_'+t.id]?parseFloat(S['time_'+t.id])||0:0),0),0);
     }
+    function calcPlannerTime(allDays){
+        const today=new Date().toISOString().slice(0,10);
+        return Object.values(getPlannerTasks()).filter(t=>t.done&&(allDays||(t.date||today)===today)).reduce((s,t)=>s+(t.actH||0)+(t.actM||0)/60,0);
+    }
     function updateTimeTiles(){
-        const learn=calcLearnTime(),project=calcProjectTime(),total=learn+project;
-        const badge=document.getElementById('time-badge');
-        if(badge)badge.textContent=fmtH(total);
-        const ttL=document.getElementById('tt-learn');if(ttL)ttL.textContent=fmtH(learn);
-        const ttP=document.getElementById('tt-project');if(ttP)ttP.textContent=fmtH(project);
-        const ttT=document.getElementById('tt-total');if(ttT)ttT.textContent=fmtH(total);
+        const learn=calcLearnTime(),project=calcProjectTime(),plannerToday=calcPlannerTime(false),plannerAll=calcPlannerTime(true);
+        const totalToday=learn+project+plannerToday,totalAll=learn+project+plannerAll;
+        const badge=document.getElementById('time-badge');if(badge)badge.textContent=fmtH(totalToday);
+        const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=fmtH(v);};
+        set('tt-learn',learn);set('tt-project',project);set('tt-planner-today',plannerToday);set('tt-total',totalToday);
+        set('tt-all-learn',learn);set('tt-all-project',project);set('tt-planner-all',plannerAll);set('tt-all-total',totalAll);
     }
     function renderTimeDetail(){
         const learnList=document.getElementById('time-learn-list');
@@ -511,7 +576,7 @@
             row.querySelector('input').id='trh-'+c.id;
             learnList.appendChild(row);
         })));
-        if(!anyLearn){const e=document.createElement('div');e.className='time-empty';e.textContent='Brak ukończonych tematów';learnList.appendChild(e);}
+        if(!anyLearn){const e=document.createElement('div');e.className='time-empty';e.textContent='No completed topics';learnList.appendChild(e);}
         projectList.innerHTML='';
         let anyProj=false;
         FEATURES.forEach(f=>f.tasks.forEach(t=>{
@@ -521,7 +586,28 @@
             row.innerHTML=`<div class="time-row-name" title="${esc(t.txt)}">${esc(t.txt)}</div><input class="time-row-input" id="trh-${t.id}" type="number" min="0" max="99" value="${th}" onchange="saveItemTimeHM('${t.id}',this.value,document.getElementById('trm-${t.id}').value)"><span class="time-unit">h</span><input class="time-row-input" id="trm-${t.id}" type="number" min="0" max="59" value="${tm}" onchange="saveItemTimeHM('${t.id}',document.getElementById('trh-${t.id}').value,this.value)"><span class="time-unit">min</span>`;
             projectList.appendChild(row);
         }));
-        if(!anyProj){const e=document.createElement('div');e.className='time-empty';e.textContent='Brak ukończonych zadań';projectList.appendChild(e);}
+        if(!anyProj){const e=document.createElement('div');e.className='time-empty';e.textContent='No completed tasks';projectList.appendChild(e);}
+        const plannerList=document.getElementById('time-planner-list');
+        if(plannerList){
+            plannerList.innerHTML='';
+            const today=new Date().toISOString().slice(0,10);
+            const allTasks=Object.values(getPlannerTasks()).filter(t=>t.done);
+            const todayTasks=allTasks.filter(t=>(t.date||today)===today);
+            if(!todayTasks.length){const e=document.createElement('div');e.className='time-empty';e.textContent='No completed tasks today';plannerList.appendChild(e);}
+            else todayTasks.forEach(t=>{
+                const row=document.createElement('div');row.className='time-row';
+                const act=(t.actH||0)+(t.actM||0)/60;
+                row.innerHTML=`<div class="time-row-name" title="${esc(t.name||'')}">${esc(t.name||'')}</div><span style="font-size:11px;font-family:var(--mono);color:var(--text2)">${fmtH(act)}</span>`;
+                plannerList.appendChild(row);
+            });
+            const allActMin=allTasks.reduce((s,t)=>(t.actH||0)*60+(t.actM||0)+s,0);
+            if(allActMin>0){
+                const divider=document.createElement('div');
+                divider.style.cssText='margin-top:10px;padding-top:8px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:11px;font-family:var(--mono)';
+                divider.innerHTML=`<span style="color:var(--text3)">All days total</span><span style="color:var(--text2)">${fmtH(allActMin/60)}</span>`;
+                plannerList.appendChild(divider);
+            }
+        }
     }
     window.saveItemTimeHM=function(id,hVal,mVal){
         S['time_'+id]=(parseFloat(hVal)||0)+(parseFloat(mVal)||0)/60;save();updateTimeTiles();
@@ -1213,13 +1299,155 @@
         QUESTIONS.forEach((cat,i)=>{ const c=document.getElementById('clist-qi'+i);if(c)renderCustomList('quiz_qi'+i,c,'quiz'); });
         SKILLS.forEach(dom=>{ const c=document.getElementById('clist-'+dom.id);if(c)renderCustomList('skill_'+dom.id,c,'skill'); });
         updateTimeTiles();
+        if(!_plannerLock)renderPlannerTasks();
     }
 
     // ── GLOBAL ACTIONS ────────────────────────────────────────────────────────────
 
     window.showTab=function(t){
-        document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['learn','project','interview','skills'][i]===t));
+        document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['learn','project','interview','skills','planner'][i]===t));
         document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='tab-'+t));
+    };
+
+    let _plannerLock=false;
+    function getPlannerTasks(){ return S.planner||{}; }
+    function savePlannerTasks(tasks){ S.planner=tasks; save(); }
+
+    function fmtMin(m){if(!m)return'0h';return m>=60?Math.floor(m/60)+'h'+(m%60?' '+m%60+'min':''):m+'min';}
+    function fmtDate(d){
+        const today=new Date().toISOString().slice(0,10);
+        const yest=new Date(Date.now()-864e5).toISOString().slice(0,10);
+        if(d===today)return{label:'Today',sub:new Date(d+'T12:00:00').toLocaleDateString('en',{month:'short',day:'numeric'})};
+        if(d===yest)return{label:'Yesterday',sub:new Date(d+'T12:00:00').toLocaleDateString('en',{month:'short',day:'numeric'})};
+        return{label:new Date(d+'T12:00:00').toLocaleDateString('en',{weekday:'short',month:'short',day:'numeric'}),sub:''};
+    }
+
+    function updatePlannerStats(){
+        const today=new Date().toISOString().slice(0,10);
+        const all=Object.values(getPlannerTasks());
+        const todayTasks=all.filter(t=>(t.date||today)===today);
+        const done=todayTasks.filter(t=>t.done).length;
+        const est=todayTasks.reduce((s,t)=>(t.estH||0)*60+(t.estM||0)+s,0);
+        const act=todayTasks.filter(t=>t.done).reduce((s,t)=>(t.actH||0)*60+(t.actM||0)+s,0);
+        document.getElementById('pl-done').textContent=done;
+        document.getElementById('pl-total').textContent=todayTasks.length;
+        document.getElementById('pl-est').textContent=fmtMin(est);
+        document.getElementById('pl-actual').textContent=fmtMin(act);
+    }
+
+    function buildTaskRow(id,t){
+        const div=document.createElement('div');
+        div.className='planner-task'+(t.done?' ptdone':'');div.id='ptask-'+id;
+        const estLabel=((t.estH||0)+(t.estM||0))>0?`est. ${t.estH||0}h ${t.estM||0}min`:'no estimate';
+        const actBadge=t.done?`<span class="pt-badge actual" onclick="editPlannerActual('${id}')" title="Click to edit" style="cursor:pointer">${((t.actH||0)+(t.actM||0))>0?`actual ${t.actH||0}h ${t.actM||0}min`:'+ add actual'}</span>`:'';
+        div.innerHTML=`<div class="pt-chk" onclick="togglePlannerDone('${id}')">${t.done?'✓':''}</div><span class="pt-name">${esc(t.name||'')}</span><span class="pt-badge">${estLabel}</span>${actBadge}<button class="pt-edit" onclick="editPlannerTask('${id}')" title="Edit">✎</button><button class="pt-del" onclick="deletePlannerTask('${id}')" title="Delete">×</button>`;
+        return div;
+    }
+
+    function renderPlannerTasks(){
+        const root=document.getElementById('planner-root');if(!root)return;
+        const tasks=getPlannerTasks();
+        const today=new Date().toISOString().slice(0,10);
+        const entries=Object.entries(tasks);
+        if(!entries.length){root.innerHTML='<div class="planner-empty">No tasks yet — add one above</div>';updatePlannerStats();return;}
+        const groups={};
+        entries.forEach(([id,t])=>{const d=t.date||today;if(!groups[d])groups[d]=[];groups[d].push([id,t]);});
+        root.innerHTML='';
+        Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(date=>{
+            const items=groups[date];
+            const {label,sub}=fmtDate(date);
+            const actMin=items.filter(t=>t.done).reduce((s,[,t])=>(t.actH||0)*60+(t.actM||0)+s,0);
+            const doneCount=items.filter(([,t])=>t.done).length;
+            const summary=`${doneCount}/${items.length} done${actMin?' · '+fmtMin(actMin)+' actual':''}`;
+            const dayDiv=document.createElement('div');dayDiv.className='planner-day';
+            const hdr=document.createElement('div');hdr.className='planner-day-hdr';
+            hdr.innerHTML=`<span class="planner-day-label">${label}</span>${sub?`<span class="planner-day-date">${sub}</span>`:''}<span class="planner-day-summary">${summary}</span>`;
+            dayDiv.appendChild(hdr);
+            items.sort((a,b)=>a[0].localeCompare(b[0])).forEach(([id,t])=>dayDiv.appendChild(buildTaskRow(id,t)));
+            root.appendChild(dayDiv);
+        });
+        updatePlannerStats();
+    }
+
+    window.addPlannerTask=function(){
+        const nameEl=document.getElementById('pt-name-inp');
+        const name=(nameEl?.value||'').trim();if(!name)return;
+        const estH=parseFloat(document.getElementById('pt-esth-inp')?.value)||0;
+        const estM=parseFloat(document.getElementById('pt-estm-inp')?.value)||0;
+        const tasks=getPlannerTasks();
+        const id='pt'+Date.now();
+        const date=new Date().toISOString().slice(0,10);
+        tasks[id]={name,estH,estM,done:false,date};
+        savePlannerTasks(tasks);
+        nameEl.value='';
+        document.getElementById('pt-esth-inp').value=0;
+        document.getElementById('pt-estm-inp').value=0;
+        nameEl.focus();
+        renderPlannerTasks();
+    };
+
+    window.togglePlannerDone=function(id){
+        const tasks=getPlannerTasks();if(!tasks[id])return;
+        tasks[id].done=!tasks[id].done;
+        if(tasks[id].done){
+            _plannerLock=true;
+            savePlannerTasks(tasks);
+            const div=document.getElementById('ptask-'+id);if(!div){_plannerLock=false;return;}
+            div.classList.add('ptdone');div.querySelector('.pt-chk').textContent='✓';
+            const tc=document.createElement('div');tc.className='time-confirm';tc.id='ptc-'+id;
+            tc.innerHTML=`<span class="time-confirm-lbl">Actual time:</span><input class="time-confirm-input" id="ptch-${id}" type="number" min="0" max="99" value="0"><span class="time-unit">h</span><input class="time-confirm-input" id="ptcm-${id}" type="number" min="0" max="59" value="0"><span class="time-unit">min</span><button class="time-confirm-btn" onclick="confirmPlannerTime('${id}')">✓</button>`;
+            div.after(tc);
+            const inp=document.getElementById('ptch-'+id);if(inp){inp.focus();inp.select();}
+            [document.getElementById('ptch-'+id),document.getElementById('ptcm-'+id)].forEach(i=>i?.addEventListener('keydown',e=>{if(e.key==='Enter')window.confirmPlannerTime(id);}));
+        } else {
+            delete tasks[id].actH;delete tasks[id].actM;
+            savePlannerTasks(tasks);
+            const tc=document.getElementById('ptc-'+id);if(tc)tc.remove();
+            renderPlannerTasks();
+        }
+    };
+
+    window.confirmPlannerTime=function(id){
+        const tasks=getPlannerTasks();if(!tasks[id])return;
+        tasks[id].actH=parseFloat(document.getElementById('ptch-'+id)?.value)||0;
+        tasks[id].actM=parseFloat(document.getElementById('ptcm-'+id)?.value)||0;
+        _plannerLock=false;
+        savePlannerTasks(tasks);
+        const tc=document.getElementById('ptc-'+id);if(tc)tc.remove();
+        renderPlannerTasks();updateTimeTiles();
+    };
+
+    window.editPlannerActual=function(id){
+        if(document.getElementById('ptc-'+id))return;
+        const tasks=getPlannerTasks();const t=tasks[id];if(!t)return;
+        const div=document.getElementById('ptask-'+id);if(!div)return;
+        _plannerLock=true;
+        const tc=document.createElement('div');tc.className='time-confirm';tc.id='ptc-'+id;
+        tc.innerHTML=`<span class="time-confirm-lbl">Actual time:</span><input class="time-confirm-input" id="ptch-${id}" type="number" min="0" max="99" value="${t.actH||0}"><span class="time-unit">h</span><input class="time-confirm-input" id="ptcm-${id}" type="number" min="0" max="59" value="${t.actM||0}"><span class="time-unit">min</span><button class="time-confirm-btn" onclick="confirmPlannerTime('${id}')">✓</button>`;
+        div.after(tc);
+        const inp=document.getElementById('ptch-'+id);if(inp){inp.focus();inp.select();}
+        [document.getElementById('ptch-'+id),document.getElementById('ptcm-'+id)].forEach(i=>i?.addEventListener('keydown',e=>{if(e.key==='Enter')window.confirmPlannerTime(id);}));
+    };
+
+    window.deletePlannerTask=function(id){
+        const tasks=getPlannerTasks();delete tasks[id];savePlannerTasks(tasks);renderPlannerTasks();
+    };
+
+    window.editPlannerTask=function(id){
+        const tasks=getPlannerTasks();const t=tasks[id];if(!t)return;
+        const div=document.getElementById('ptask-'+id);if(!div)return;
+        div.innerHTML=`<div class="pt-edit-row"><input class="pt-edit-inp" id="ptedit-name-${id}" value="${esc(t.name||'')}"><input class="planner-input planner-time-inp" id="ptedit-h-${id}" type="number" min="0" max="99" value="${t.estH||0}" style="width:46px"><span style="font-size:11px;color:var(--text3)">h</span><input class="planner-input planner-time-inp" id="ptedit-m-${id}" type="number" min="0" max="59" value="${t.estM||0}" style="width:46px"><span style="font-size:11px;color:var(--text3)">min</span><button class="pt-edit-save" onclick="savePlannerTaskEdit('${id}')">Save</button><button class="pt-edit-cancel" onclick="renderPlannerTasks()">Cancel</button></div>`;
+        const inp=document.getElementById('ptedit-name-'+id);if(inp){inp.focus();inp.select();}
+        inp?.addEventListener('keydown',e=>{if(e.key==='Enter')window.savePlannerTaskEdit(id);if(e.key==='Escape')renderPlannerTasks();});
+    };
+
+    window.savePlannerTaskEdit=function(id){
+        const tasks=getPlannerTasks();if(!tasks[id])return;
+        const name=(document.getElementById('ptedit-name-'+id)?.value||'').trim();if(!name)return;
+        tasks[id].name=name;
+        tasks[id].estH=parseFloat(document.getElementById('ptedit-h-'+id)?.value)||0;
+        tasks[id].estM=parseFloat(document.getElementById('ptedit-m-'+id)?.value)||0;
+        savePlannerTasks(tasks);renderPlannerTasks();
     };
     window.markDone=function(id,sid){
         S['c_'+id]=!S['c_'+id];save();
@@ -1459,30 +1687,40 @@
     renderInterview();
     renderSkills();
     renderPlan();
+    renderPlannerTasks();
+    document.getElementById('pt-name-inp')?.addEventListener('keydown',e=>{if(e.key==='Enter')window.addPlannerTask();});
     if(document.body.classList.contains('light')) document.getElementById('theme-btn').innerHTML='<i class="ti ti-moon"></i>';
     connect(user);
 </script>
 
-<button class="time-fab" id="time-fab" onclick="toggleTimePanel()" title="Czas nauki">
+<button class="time-fab" id="time-fab" onclick="toggleTimePanel()" title="Learning time">
     <i class="ti ti-clock"></i>
     <span class="time-fab-badge" id="time-badge">0h</span>
 </button>
 <div class="time-overlay" id="time-overlay" onclick="toggleTimePanel()"></div>
 <div class="time-panel" id="time-panel">
     <div class="time-panel-hdr">
-        <div class="time-panel-title"><i class="ti ti-clock"></i> Czas nauki</div>
+        <div class="time-panel-title"><i class="ti ti-clock"></i> Learning time</div>
         <button class="time-panel-close" onclick="toggleTimePanel()">×</button>
     </div>
+    <div class="time-sec-lbl" style="padding:0 14px;margin-bottom:0;color:var(--text)">Today</div>
     <div class="time-tiles">
-        <div class="time-tile"><div class="time-tile-val" id="tt-learn">0h</div><div class="time-tile-lbl">Nauka</div></div>
-        <div class="time-tile"><div class="time-tile-val" id="tt-project">0h</div><div class="time-tile-lbl">Projekt</div></div>
+        <div class="time-tile"><div class="time-tile-val" id="tt-learn">0h</div><div class="time-tile-lbl">Learning</div></div>
+        <div class="time-tile"><div class="time-tile-val" id="tt-project">0h</div><div class="time-tile-lbl">Project</div></div>
+        <div class="time-tile"><div class="time-tile-val" id="tt-planner-today">0h</div><div class="time-tile-lbl">Planner</div></div>
         <div class="time-tile time-tile-total"><div class="time-tile-val" id="tt-total">0h</div><div class="time-tile-lbl">Total</div></div>
     </div>
+    <div class="time-sec-lbl" style="padding:0 14px;margin-bottom:0;color:var(--text)">All time</div>
+    <div class="time-tiles" style="padding-top:8px">
+        <div class="time-tile"><div class="time-tile-val" id="tt-all-learn">0h</div><div class="time-tile-lbl">Learning</div></div>
+        <div class="time-tile"><div class="time-tile-val" id="tt-all-project">0h</div><div class="time-tile-lbl">Project</div></div>
+        <div class="time-tile"><div class="time-tile-val" id="tt-planner-all">0h</div><div class="time-tile-lbl">Planner</div></div>
+        <div class="time-tile time-tile-total"><div class="time-tile-val" id="tt-all-total">0h</div><div class="time-tile-lbl">Total</div></div>
+    </div>
     <div class="time-detail">
-        <div class="time-sec-lbl">Koncepty — edytuj faktyczny czas</div>
         <div id="time-learn-list"></div>
-        <div class="time-sec-lbl" style="margin-top:18px">Zadania projektu</div>
-        <div id="time-project-list"></div>
+        <div id="time-project-list" style="margin-top:8px"></div>
+        <div id="time-planner-list" style="margin-top:8px"></div>
     </div>
 </div>
 </body>
