@@ -542,25 +542,30 @@
 
     function fmtH(v){const h=Math.floor(v),m=Math.round((v-h)*60);return h>0&&m>0?h+'h '+m+'min':h>0?h+'h':m>0?m+'min':'0h';}
     function toHM(v){return{h:Math.floor(v),m:Math.round((Math.floor(v*100)/100%1)*60)};}
-    function calcLearnTime(){
-        const fromConcepts=SPRINTS.filter(sp=>sp.sections).reduce((sum,sp)=>sum+sp.sections.reduce((s2,sec)=>s2+sec.concepts.reduce((s3,c)=>s3+(S['c_'+c.id]?parseFloat(S['time_'+c.id])||0:0),0),0),0);
-        const fromItems=SPRINTS.filter(sp=>sp.topics).reduce((sum,sp)=>sum+sp.topics.reduce((s2,t)=>s2+t.items.reduce((s3,i)=>s3+(S['ji_'+i.id]?parseFloat(S['time_'+i.id])||0:0),0),0),0);
+    function calcLearnTime(todayOnly){
+        const today=new Date().toISOString().slice(0,10);
+        const dateOk=(prefix,id)=>!todayOnly||(S[prefix+id]||'')=== today;
+        const fromConcepts=SPRINTS.filter(sp=>sp.sections).reduce((sum,sp)=>sum+sp.sections.reduce((s2,sec)=>s2+sec.concepts.reduce((s3,c)=>s3+(S['c_'+c.id]&&dateOk('done_date_c_',c.id)?parseFloat(S['time_'+c.id])||0:0),0),0),0);
+        const fromItems=SPRINTS.filter(sp=>sp.topics).reduce((sum,sp)=>sum+sp.topics.reduce((s2,t)=>s2+t.items.reduce((s3,i)=>s3+(S['ji_'+i.id]&&dateOk('done_date_ji_',i.id)?parseFloat(S['time_'+i.id])||0:0),0),0),0);
         return fromConcepts+fromItems;
     }
-    function calcProjectTime(){
-        return FEATURES.reduce((sum,f)=>sum+f.tasks.reduce((s,t)=>s+(S['t_'+t.id]?parseFloat(S['time_'+t.id])||0:0),0),0);
+    function calcProjectTime(todayOnly){
+        const today=new Date().toISOString().slice(0,10);
+        return FEATURES.reduce((sum,f)=>sum+f.tasks.reduce((s,t)=>s+(S['t_'+t.id]&&(!todayOnly||(S['done_date_t_'+t.id]||'')===today)?parseFloat(S['time_'+t.id])||0:0),0),0);
     }
     function calcPlannerTime(allDays){
         const today=new Date().toISOString().slice(0,10);
         return Object.values(getPlannerTasks()).filter(t=>t.done&&(allDays||(t.date||today)===today)).reduce((s,t)=>s+(t.actH||0)+(t.actM||0)/60,0);
     }
     function updateTimeTiles(){
-        const learn=calcLearnTime(),project=calcProjectTime(),plannerToday=calcPlannerTime(false),plannerAll=calcPlannerTime(true);
-        const totalToday=learn+project+plannerToday,totalAll=learn+project+plannerAll;
+        const learnToday=calcLearnTime(true),learnAll=calcLearnTime(false);
+        const projectToday=calcProjectTime(true),projectAll=calcProjectTime(false);
+        const plannerToday=calcPlannerTime(false),plannerAll=calcPlannerTime(true);
+        const totalToday=learnToday+projectToday+plannerToday,totalAll=learnAll+projectAll+plannerAll;
         const badge=document.getElementById('time-badge');if(badge)badge.textContent=fmtH(totalToday);
         const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=fmtH(v);};
-        set('tt-learn',learn);set('tt-project',project);set('tt-planner-today',plannerToday);set('tt-total',totalToday);
-        set('tt-all-learn',learn);set('tt-all-project',project);set('tt-planner-all',plannerAll);set('tt-all-total',totalAll);
+        set('tt-learn',learnToday);set('tt-project',projectToday);set('tt-planner-today',plannerToday);set('tt-total',totalToday);
+        set('tt-all-learn',learnAll);set('tt-all-project',projectAll);set('tt-planner-all',plannerAll);set('tt-all-total',totalAll);
     }
     function renderTimeDetail(){
         const learnList=document.getElementById('time-learn-list');
@@ -1450,7 +1455,10 @@
         savePlannerTasks(tasks);renderPlannerTasks();
     };
     window.markDone=function(id,sid){
-        S['c_'+id]=!S['c_'+id];save();
+        S['c_'+id]=!S['c_'+id];
+        if(S['c_'+id])S['done_date_c_'+id]=new Date().toISOString().slice(0,10);
+        else delete S['done_date_c_'+id];
+        save();
         const el=document.getElementById('concept-'+id);el.classList.toggle('cdone',!!S['c_'+id]);
         const btn=document.getElementById('dbtn-'+id);if(btn)btn.textContent=S['c_'+id]?'✓ Done':'Mark as done';
         const existing=document.getElementById('tc-'+id);if(existing)existing.remove();
@@ -1473,7 +1481,10 @@
     window.toggleTopic=function(tid){document.getElementById('jtopic-'+tid).classList.toggle('jtopen');};
     window.toggleJItem=function(iid){document.getElementById('jitem-'+iid).classList.toggle('jiopen');};
     window.markJItemDone=function(iid,tid,spid){
-        S['ji_'+iid]=!S['ji_'+iid];save();
+        S['ji_'+iid]=!S['ji_'+iid];
+        if(S['ji_'+iid])S['done_date_ji_'+iid]=new Date().toISOString().slice(0,10);
+        else delete S['done_date_ji_'+iid];
+        save();
         const el=document.getElementById('jitem-'+iid);if(!el)return;
         el.classList.toggle('jidone',!!S['ji_'+iid]);
         const chk=el.querySelector('.jichk');if(chk)chk.textContent=S['ji_'+iid]?'✓':'';
@@ -1506,7 +1517,10 @@
         const tc=document.getElementById('tc-'+id);if(tc)tc.remove();
     };
     window.toggleTask=function(id){
-        S['t_'+id]=!S['t_'+id];save();
+        S['t_'+id]=!S['t_'+id];
+        if(S['t_'+id])S['done_date_t_'+id]=new Date().toISOString().slice(0,10);
+        else delete S['done_date_t_'+id];
+        save();
         const el=document.getElementById('task-'+id);el.classList.toggle('tdone',!!S['t_'+id]);el.querySelector('.tchk').textContent=S['t_'+id]?'✓':'';
         if(!S['t_'+id])delete S['time_'+id];
         save();updateTimeTiles();
